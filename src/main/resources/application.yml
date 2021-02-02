@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  context-path: /
+
+
+spring:
+  mvc:
+    view:
+      prefix: /static/
+      suffix: .jsp
+
+
+logging:
+  level: debug
