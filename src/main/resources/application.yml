@@ -2,6 +2,23 @@ server:
   port: 8080
   context-path: /
 
+mybatis:
+  config-location: classpath:mybatis.xml
+  mapper-locations: -classpath:mapper/*.xml
+mybatis-plus:
+  config-location: classpath:mybatis.xml
+  mapper-locations: -classpath:mapper/*.xml
+  type-enums-package: com.iwyu.marking.myenum
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
 
 spring:
   datasource:
