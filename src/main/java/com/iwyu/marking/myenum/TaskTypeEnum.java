@@ -2,11 +2,12 @@ package com.iwyu.marking.myenum;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * Created by Chester on 6/2/2021.
  */
-@Data
+@Getter
 public enum TaskTypeEnum {
     PRIVATE (1,"个人作业"),
     GROUP(2,"小组作业");

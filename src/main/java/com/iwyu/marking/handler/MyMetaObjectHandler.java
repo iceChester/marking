@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @ClassName DeletedMetaObjectHandler
- * @Description 假删除自动赋值配置类
+ * @Description 假删除、乐观锁自动赋值配置类
  * @Author XiaoMao
  * @Date 6/2/2021 下午4:08
  * @Version 1.0
@@ -20,7 +20,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName("version",new Long(0),metaObject);
+        this.setFieldValByName("version",new Long(1),metaObject);
+        this.setFieldValByName("deleted",new Long(0),metaObject);
     }
 
     @Override

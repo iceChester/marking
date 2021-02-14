@@ -1,7 +1,7 @@
 package com.iwyu.marking.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,6 +33,8 @@ public class Course implements Serializable {
       private String courseName;
 
       @ApiModelProperty(value = "假删除标识")
+      @TableField(fill = FieldFill.INSERT)
+      @TableLogic
       private Integer deleted;
 
 

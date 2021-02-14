@@ -1,6 +1,10 @@
 package com.iwyu.marking.entity;
 
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -35,7 +39,9 @@ public class User implements Serializable {
       @ApiModelProperty(value = "权限，枚举")
       private Integer authority;
 
-      @ApiModelProperty(value = "假删除标识")
+      @ApiModelProperty(value = "假删除标识，创建时自动填充0")
+      @TableField(fill = FieldFill.INSERT)
+      @TableLogic
       private Integer deleted;
 
 
