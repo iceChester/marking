@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -18,6 +19,7 @@ import lombok.experimental.Accessors;
  * @since 2021-02-06
  */
 @Data
+@Repository
   @EqualsAndHashCode(callSuper = false)
   @Accessors(chain = true)
 @ApiModel(value="Course对象", description="")

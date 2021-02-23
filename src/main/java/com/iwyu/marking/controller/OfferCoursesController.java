@@ -34,6 +34,7 @@ public class OfferCoursesController {
     @ApiOperation(value = "教师开课")
     @PostMapping(value = "/offerCourse")
     public String offerCourse (Model model, @RequestBody OfferCourses course){
+
        if(offerCoursesService.save(course)){
            model.addAttribute("msg","添加成功");
        }else {

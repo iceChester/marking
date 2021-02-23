@@ -18,7 +18,7 @@
         <mysql.version>5.1.6</mysql.version>
         <druid.version>1.1.10</druid.version>
         <pageHelper.version>1.2.3</pageHelper.version>
-        <mybatis.version>3.3.1</mybatis.version>
+        <mybatisPlus.version>3.3.1</mybatisPlus.version>
         <shiro.version>1.5.3</shiro.version>
         <thymeleaf.version>2.3.8.RELEASE</thymeleaf.version>
         <lambok.version>1.18.16</lambok.version>
@@ -64,11 +64,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-<!--        mybatis-->
+<!--        mybatis-puls-->
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis.version}</version>
+            <version>${mybatisPlus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>${mybatisPlus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 <!--        分页插件PageHelper-->
         <dependency>
@@ -105,7 +115,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
-            <version>${mybatis.version}</version>
+            <version>${mybatisPlus.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.velocity/velocity -->
         <dependency>
@@ -113,6 +123,8 @@
             <artifactId>velocity</artifactId>
             <version>${velocity.version}</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>

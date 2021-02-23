@@ -1,13 +1,11 @@
 server:
-  port: 8080
+  port: 8181
   context-path: /
 
-mybatis:
-  config-location: classpath:mybatis.xml
-  mapper-locations: -classpath:mapper/*.xml
 mybatis-plus:
-  config-location: classpath:mybatis.xml
-  mapper-locations: -classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:com/iwyu/marking/mapper/xml/*.xml
   type-enums-package: com.iwyu.marking.myenum
   global-config:
     db-config:
