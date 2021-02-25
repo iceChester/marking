@@ -1,5 +1,6 @@
 package com.iwyu.marking.service;
 
+import com.iwyu.marking.dto.OfferCourseDTO;
 import com.iwyu.marking.entity.OfferCourses;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-02-06
  */
 public interface OfferCoursesService extends IService<OfferCourses> {
-
+    //开课
+    boolean saveOffer(OfferCourseDTO dto);
 }

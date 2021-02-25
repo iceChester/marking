@@ -24,7 +24,7 @@ public class Teacher implements Serializable {
     private static final long serialVersionUID=1L;
 
       @ApiModelProperty(value = "教师id")
-        private String teacherId;
+        private Integer teacherId;
 
       @ApiModelProperty(value = "教师名")
       private String teacherName;

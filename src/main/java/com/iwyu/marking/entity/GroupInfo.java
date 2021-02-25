@@ -36,22 +36,22 @@ public class GroupInfo implements Serializable {
       private String groupName;
 
       @ApiModelProperty(value = "组长")
-      private String leaderId;
+      private Integer leaderId;
 
       @ApiModelProperty(value = " 成员一")
-      private String memberOne;
+      private Integer memberOne;
 
       @ApiModelProperty(value = " 成员二")
-      private String memberTwo;
+      private Integer memberTwo;
 
       @ApiModelProperty(value = "成员三")
-      private String memberThree;
+      private Integer memberThree;
 
       @ApiModelProperty(value = " 成员四")
-      private String memberFour;
+      private Integer memberFour;
 
       @ApiModelProperty(value = " 成员五")
-      private String memberFive;
+      private Integer memberFive;
 
 
 }

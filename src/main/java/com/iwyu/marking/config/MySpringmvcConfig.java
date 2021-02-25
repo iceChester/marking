@@ -20,7 +20,7 @@ import java.util.List;
  **/
 @Configuration
 @EnableWebMvc
-public class MySpringmvcCofig implements WebMvcConfigurer {
+public class MySpringmvcConfig implements WebMvcConfigurer {
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));

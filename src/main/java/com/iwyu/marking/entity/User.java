@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.iwyu.marking.myenum.RoleEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,9 +35,9 @@ public class User implements Serializable {
       private String password;
 
       @ApiModelProperty(value = "角色，枚举")
-      private Integer role;
+      private RoleEnum role;
 
-      @ApiModelProperty(value = "权限，枚举")
+      @ApiModelProperty(value = "权限，枚举,未实现")
       private Integer authority;
 
       @ApiModelProperty(value = "假删除标识，创建时自动填充0")
