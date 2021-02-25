@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,7 +19,12 @@ import java.util.List;
  **/
 @Data
 @ApiModel
-public class OfferCourseDTO {
+public class OfferCourseDTO implements Serializable {
+
+    private Integer offerId;
+    private Integer courseId;
+    private String courseName;
+    private Integer deleted;
 
     @ApiModelProperty(value = "主要授课教师")
     private Integer mainTeacherId;
@@ -36,6 +42,7 @@ public class OfferCourseDTO {
         courses.setMainTeacherId(dto.getMainTeacherId());
         courses.setAssistantTeacherOne(dto.getAssistantTeacherOne());
         courses.setAssistantTeacherTwo(dto.getAssistantTeacherTwo());
+        courses.setCourseId(dto.getCourseId());
         String temp = "";
         for (int i=0;i<dto.getClasses().size();i++) {
             temp = temp + dto.getClasses().get(i);

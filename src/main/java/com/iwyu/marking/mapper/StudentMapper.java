@@ -16,6 +16,6 @@ import java.util.List;
  */
 public interface StudentMapper extends BaseMapper<Student> {
 
-
-    List<String> getClasses();
+    @Select("SELECT  class_name,student_id  FROM `student` where class_name like #{name} group by class_name")
+    List<Student> getClasses(String name);
 }

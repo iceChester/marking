@@ -1,6 +1,7 @@
 package com.iwyu.marking.controller;
 
 
+import com.iwyu.marking.dto.OfferCourseDTO;
 import com.iwyu.marking.entity.OfferCourses;
 import com.iwyu.marking.service.OfferCoursesService;
 import io.swagger.annotations.Api;
@@ -8,12 +9,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * <p>
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Chester
  * @since 2021-02-06
  */
-@Controller
+@RestController
 @RequestMapping("/offerCourses")
 @Api(value = "开设课程前端控制器")
 public class OfferCoursesController {
@@ -33,14 +31,8 @@ public class OfferCoursesController {
 
     @ApiOperation(value = "教师开课")
     @PostMapping(value = "/offerCourse")
-    public String offerCourse (Model model, @RequestBody OfferCourses course){
-
-       if(offerCoursesService.save(course)){
-           model.addAttribute("msg","添加成功");
-       }else {
-           model.addAttribute("msg","添加失败");
-       }
-        return "coursePage";
+    public boolean offerCourse (@RequestBody OfferCourseDTO dto){
+        return offerCoursesService.saveOffer(dto);
     }
 
     @ApiOperation(value = "修改开课的课程信息")
