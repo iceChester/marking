@@ -1,9 +1,18 @@
 package com.iwyu.marking.controller;
 
 
+import com.iwyu.marking.dto.TeacherCourseDTO;
+import com.iwyu.marking.mapper.TimetableMapper;
+import com.iwyu.marking.service.TimetableService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,9 +22,16 @@ import org.springframework.stereotype.Controller;
  * @author Chester
  * @since 2021-02-25
  */
-@Controller
+@RestController
 @RequestMapping("/timetable")
 public class TimetableController {
 
+    @Autowired
+    private TimetableService timetableService;
+
+    @GetMapping("/teacherCourse/{id}")
+    public List<TeacherCourseDTO> teacherCourse(@PathVariable("id") Integer teacher_id){
+        return timetableService.findMyCoures(teacher_id);
+    }
 }
 

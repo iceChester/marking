@@ -44,5 +44,7 @@ public class OfferCourses implements Serializable {
       @ApiModelProperty(value = "班级，用逗号隔开")
       private String classes;
 
+      @ApiModelProperty(value = "课程名称")
+      private String courseName;
 
 }

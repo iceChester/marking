@@ -43,6 +43,7 @@ public class OfferCourseDTO implements Serializable {
         courses.setAssistantTeacherOne(dto.getAssistantTeacherOne());
         courses.setAssistantTeacherTwo(dto.getAssistantTeacherTwo());
         courses.setCourseId(dto.getCourseId());
+        courses.setCourseName(dto.getCourseName());
         String temp = "";
         for (int i=0;i<dto.getClasses().size();i++) {
             temp = temp + dto.getClasses().get(i);
