@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.iwyu.marking.myenum.RoleEnum;
 import io.swagger.annotations.ApiModel;
@@ -29,6 +30,7 @@ public class User implements Serializable {
     private static final long serialVersionUID=1L;
 
       @ApiModelProperty(value = "账号")
+      @TableId
         private String account;
 
       @ApiModelProperty(value = "密码")

@@ -2,6 +2,7 @@ package com.iwyu.marking.controller;
 
 
 import com.iwyu.marking.dto.TeacherCourseDTO;
+import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.mapper.TimetableMapper;
 import com.iwyu.marking.service.TimetableService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ public class TimetableController {
     @GetMapping("/teacherCourse/{id}")
     public List<TeacherCourseDTO> teacherCourse(@PathVariable("id") Integer teacher_id){
         return timetableService.findMyCoures(teacher_id);
+    }
+    @GetMapping("/studentInfo/{offerId}")
+    public List<Student> studentInfo(@PathVariable("offerId") Integer offerId){
+        return timetableService.studentInfo(offerId);
     }
 }
 

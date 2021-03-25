@@ -15,10 +15,27 @@ import java.io.Serializable;
  **/
 @Data
 public class TeacherCourseDTO implements Serializable {
+
+    private Integer OfferId;
+    private Integer courseId;
     private String courseName;
     private String mainTeacherName;
     private String assistantOneName;
     private String assistantTwoName;
     private String classes;
     private Integer memberCount;
+
+    @Override
+    public String toString() {
+        return "TeacherCourseDTO{" +
+                "OfferId=" + OfferId +
+                ", courseId=" + courseId +
+                ", courseName='" + courseName + '\'' +
+                ", mainTeacherName='" + mainTeacherName + '\'' +
+                ", assistantOneName='" + assistantOneName + '\'' +
+                ", assistantTwoName='" + assistantTwoName + '\'' +
+                ", classes='" + classes + '\'' +
+                ", memberCount=" + memberCount +
+                '}';
+    }
 }

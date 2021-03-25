@@ -3,6 +3,7 @@ package com.iwyu.marking.service.impl;
 import com.iwyu.marking.dto.TeacherCourseDTO;
 import com.iwyu.marking.dto.TeacherDTO;
 import com.iwyu.marking.entity.OfferCourses;
+import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.mapper.OfferCoursesMapper;
 import com.iwyu.marking.mapper.TeacherMapper;
@@ -38,7 +39,6 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
         List<OfferCourses> offerCourses = offerCoursesMapper.findMyCoures(teacherId);
         List<TeacherCourseDTO> teacherCourseDTOS = new ArrayList<>();
         for (OfferCourses courses :offerCourses) {
-            System.out.println(courses.getMainTeacherId());
             TeacherCourseDTO teacherCourseDTO = new TeacherCourseDTO();
             teacherCourseDTO.setMainTeacherName(teacherMapper.selectById(courses.getMainTeacherId()).getTeacherName());
             if(courses.getAssistantTeacherOne()!=null){
@@ -47,11 +47,18 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
             if(courses.getAssistantTeacherTwo()!=null){
                 teacherCourseDTO.setAssistantTwoName(teacherMapper.selectById(courses.getAssistantTeacherTwo()).getTeacherName());
             }
+            teacherCourseDTO.setOfferId(courses.getOfferId());
+            teacherCourseDTO.setCourseId(courses.getCourseId());
             teacherCourseDTO.setCourseName(courses.getCourseName());
             teacherCourseDTO.setClasses(courses.getClasses());
             teacherCourseDTO.setMemberCount(timetableMapper.countMember(courses.getOfferId()));
             teacherCourseDTOS.add(teacherCourseDTO);
         }
         return teacherCourseDTOS;
+    }
+
+    @Override
+    public List<Student> studentInfo(Integer offerId) {
+        return timetableMapper.studentInfo(offerId);
     }
 }
