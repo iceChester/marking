@@ -6,6 +6,9 @@ import com.iwyu.marking.service.TaskService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -17,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements TaskService {
 
+    @Resource
+    protected TaskMapper taskMapper;
+
+    @Override
+    public List<Task> findByOfferId(int offerId) {
+        return taskMapper.findByOfferId(offerId);
+    }
 }

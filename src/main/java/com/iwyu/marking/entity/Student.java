@@ -26,7 +26,7 @@ public class Student implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-      @ApiModelProperty(value = "学号")
+      @ApiModelProperty(value = "序号")
       @TableId(value = "student_id", type = IdType.AUTO)
       private Integer studentId;
 
