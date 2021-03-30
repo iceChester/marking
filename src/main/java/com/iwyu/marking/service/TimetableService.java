@@ -1,5 +1,6 @@
 package com.iwyu.marking.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.TeacherCourseDTO;
 import com.iwyu.marking.entity.OfferCourses;
 import com.iwyu.marking.entity.Student;
@@ -21,5 +22,5 @@ public interface TimetableService extends IService<Timetable> {
     //查询教师课程
     List<TeacherCourseDTO> findMyCoures(Integer teacherId);
     //查询课程学生名单
-    List<Student> studentInfo(Integer offerId);
+    IPage<Student> studentInfo(Long page, Long size, Integer offerId);
 }
