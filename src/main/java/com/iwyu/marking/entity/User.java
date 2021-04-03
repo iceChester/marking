@@ -1,6 +1,7 @@
 package com.iwyu.marking.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -39,8 +40,8 @@ public class User implements Serializable {
       @ApiModelProperty(value = "角色，枚举")
       private RoleEnum role;
 
-      @ApiModelProperty(value = "权限，枚举,未实现")
-      private Integer authority;
+      @ApiModelProperty(value = "权限")
+      private List<String> authority;
 
       @ApiModelProperty(value = "假删除标识，创建时自动填充0")
       @TableField(fill = FieldFill.INSERT)
