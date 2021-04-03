@@ -30,18 +30,19 @@ public class User implements Serializable {
 
     private static final long serialVersionUID=1L;
 
+    @TableId
+    private Integer id;
       @ApiModelProperty(value = "账号")
-      @TableId
         private String account;
 
       @ApiModelProperty(value = "密码")
       private String password;
 
-      @ApiModelProperty(value = "角色，枚举")
-      private RoleEnum role;
+      @ApiModelProperty(value = "角色")
+      private String role;
 
       @ApiModelProperty(value = "权限")
-      private List<String> authority;
+      private String authority;
 
       @ApiModelProperty(value = "假删除标识，创建时自动填充0")
       @TableField(fill = FieldFill.INSERT)

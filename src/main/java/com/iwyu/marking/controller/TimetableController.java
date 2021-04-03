@@ -6,6 +6,8 @@ import com.iwyu.marking.dto.TeacherCourseDTO;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.mapper.TimetableMapper;
 import com.iwyu.marking.service.TimetableService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,9 @@ public class TimetableController {
     @Autowired
     private TimetableService timetableService;
 
+
     @GetMapping("/teacherCourse/{id}")
+    @RequiresPermissions("teacher")
     public List<TeacherCourseDTO> teacherCourse(@PathVariable("id") Integer teacher_id){
         return timetableService.findMyCoures(teacher_id);
     }

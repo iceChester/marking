@@ -11,7 +11,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import sun.net.httpserver.AuthFilter;
+import com.iwyu.marking.filter.*;
 
 import javax.servlet.Filter;
 
@@ -34,22 +34,21 @@ public class ShiroConfig {
         return securityManager;
     }
 
+
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
-        //oauth过滤
+        //自定义过滤（关键）
         Map<String, Filter> filters = new HashMap<>();
         filters.put("auth", new AuthFilter());
         shiroFilter.setFilters(filters);
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/webjars/**", "anon");
-        filterMap.put("/druid/**", "anon");
-        filterMap.put("/sys/login", "anon");
-        filterMap.put("/swagger/**", "anon");
-        filterMap.put("/v2/api-docs", "anon");
-        filterMap.put("/swagger-ui.html", "anon");
-        filterMap.put("/swagger-resources/**", "anon");
+        //主要是这部分： 不要用这种方法，最好用注解的方法
+//        filterMap.put("/add", "roles[admin]");
+//        filterMap.put("/list", "roles[admin,user]");
+//        filterMap.put("/delete", "perms[admin:delete]");
+        filterMap.put("/userLogin", "anon");
         filterMap.put("/**", "auth");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
 

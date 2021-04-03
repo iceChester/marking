@@ -6,7 +6,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.iwyu.marking.dto.LoginDTO;
 import com.iwyu.marking.entity.User;
+//import com.iwyu.marking.service.ShiroService;
 import com.iwyu.marking.service.ShiroService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -44,17 +46,18 @@ public class ShiroController {
             return result;
         }
 
-        String username = loginDTO.getUsername();
+        String account = loginDTO.getAccount();
         String password = loginDTO.getPassword();
         //用户信息
-        User user = shiroService.findByUsername(username);
+        User user = shiroService.findByAccount(account);
         //账号不存在、密码错误
         if (user == null || !user.getPassword().equals(password)) {
             result.put("status", 400);
             result.put("msg", "账号或密码有误");
         } else {
             //生成token，并保存到数据库
-            result = shiroService.createToken(user.getUserId());
+            System.out.println(user.getId());
+            result = shiroService.createToken(user.getId());
             result.put("status", 200);
             result.put("msg", "登陆成功");
         }
@@ -65,7 +68,7 @@ public class ShiroController {
      * 退出
      */
     @ApiOperation(value = "登出", notes = "参数:token")
-    @PostMapping("/sys/logout")
+    @PostMapping("/userLogout")
     public Map<String, Object> logout(@RequestHeader("token")String token) {
         Map<String, Object> result = new HashMap<>();
         shiroService.logout(token);

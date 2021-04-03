@@ -9,7 +9,10 @@ package com.iwyu.marking.service.impl;
  **/
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.iwyu.marking.entity.SysToken;
 import com.iwyu.marking.entity.User;
+import com.iwyu.marking.generator.TokenGenerator;
+import com.iwyu.marking.mapper.SysTokenMapper;
 import com.iwyu.marking.mapper.UserMapper;
 import com.iwyu.marking.service.ShiroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +29,17 @@ public class ShiroServiceImpl implements ShiroService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private SysTokenRepository sysTokenRepository;
+    private SysTokenMapper sysTokenMapper;
 
     /**
      * 根据username查找用户
      *
-     * @param username
+     * @param
      * @return User
      */
     @Override
-    public User findByUsername(String account) {
-        QueryWrapper queryWrapper = new QueryWrapper();
+    public User findByAccount(String account) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper();
         queryWrapper.eq("account",account);
         User user = userMapper.selectOne(queryWrapper);
         return user;
@@ -60,7 +63,7 @@ public class ShiroServiceImpl implements ShiroService {
         //过期时间
         Date expireTime = new Date(now.getTime() + EXPIRE * 1000);
         //判断是否生成过token
-        SysToken tokenEntity = sysTokenRepository.findByUserId(userId);
+        SysToken tokenEntity = sysTokenMapper.selectById(userId);
         if (tokenEntity == null) {
             tokenEntity = new SysToken();
             tokenEntity.setUserId(userId);
@@ -68,13 +71,13 @@ public class ShiroServiceImpl implements ShiroService {
             tokenEntity.setUpdateTime(now);
             tokenEntity.setExpireTime(expireTime);
             //保存token
-            sysTokenRepository.save(tokenEntity);
+            sysTokenMapper.insert(tokenEntity);
         } else {
             tokenEntity.setToken(token);
             tokenEntity.setUpdateTime(now);
             tokenEntity.setExpireTime(expireTime);
             //更新token
-            sysTokenRepository.save(tokenEntity);
+            sysTokenMapper.insert(tokenEntity);
         }
         result.put("token", token);
         result.put("expire", EXPIRE);
@@ -90,17 +93,19 @@ public class ShiroServiceImpl implements ShiroService {
         SysToken tokenEntity = new SysToken();
         tokenEntity.setUserId(byToken.getUserId());
         tokenEntity.setToken(token);
-        sysTokenRepository.save(tokenEntity);
+        sysTokenMapper.insert(tokenEntity);
     }
 
     @Override
     public SysToken findByToken(String accessToken) {
-        return sysTokenRepository.findByToken(accessToken);
+        QueryWrapper<SysToken> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("token",accessToken);
+        return sysTokenMapper.selectOne(queryWrapper);
 
     }
 
     @Override
     public User findByUserId(Integer userId) {
-        return userRepository.findByUserId(userId);
+        return userMapper.selectById(userId);
     }
 }

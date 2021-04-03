@@ -1,5 +1,6 @@
 package com.iwyu.marking.service;
 
+import com.iwyu.marking.entity.SysToken;
 import com.iwyu.marking.entity.User;
 
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  **/
 
 public interface ShiroService {
-    User findByUsername(String username);
+    User findByAccount(String account);
     Map<String, Object> createToken(Integer userId);
     void logout(String token);
     SysToken findByToken(String accessToken);
