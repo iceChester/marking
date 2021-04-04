@@ -69,11 +69,15 @@ public class AuthRealm extends AuthorizingRealm {
         SysToken tokenEntity = shiroService.findByToken(accessToken);
         //2. token失效
         //Date转LocalDateTime
-        Date date = tokenEntity.getExpireTime();
-        Instant instant = date.toInstant();
-        ZoneId zoneId = ZoneId.systemDefault();
-        LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
-        if (tokenEntity == null || localDateTime.isBefore(LocalDateTime.now())) {
+        if(tokenEntity!=null){
+            Date date = tokenEntity.getExpireTime();
+            Instant instant = date.toInstant();
+            ZoneId zoneId = ZoneId.systemDefault();
+            LocalDateTime localDateTime = instant.atZone(zoneId).toLocalDateTime();
+            if(localDateTime.isBefore(LocalDateTime.now())){
+                throw new IncorrectCredentialsException("token失效，请重新登录");
+            }
+        }else{
             throw new IncorrectCredentialsException("token失效，请重新登录");
         }
         //3. 调用数据库的方法, 从数据库中查询 username 对应的用户记录

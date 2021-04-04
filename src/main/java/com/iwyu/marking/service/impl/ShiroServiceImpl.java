@@ -77,7 +77,7 @@ public class ShiroServiceImpl implements ShiroService {
             tokenEntity.setUpdateTime(now);
             tokenEntity.setExpireTime(expireTime);
             //更新token
-            sysTokenMapper.insert(tokenEntity);
+            sysTokenMapper.updateById(tokenEntity);
         }
         result.put("token", token);
         result.put("expire", EXPIRE);
@@ -93,7 +93,7 @@ public class ShiroServiceImpl implements ShiroService {
         SysToken tokenEntity = new SysToken();
         tokenEntity.setUserId(byToken.getUserId());
         tokenEntity.setToken(token);
-        sysTokenMapper.insert(tokenEntity);
+        sysTokenMapper.updateById(tokenEntity);
     }
 
     @Override

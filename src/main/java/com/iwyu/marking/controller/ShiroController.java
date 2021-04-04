@@ -56,8 +56,8 @@ public class ShiroController {
             result.put("msg", "账号或密码有误");
         } else {
             //生成token，并保存到数据库
-            System.out.println(user.getId());
             result = shiroService.createToken(user.getId());
+            result.put("userId",user.getId());
             result.put("status", 200);
             result.put("msg", "登陆成功");
         }

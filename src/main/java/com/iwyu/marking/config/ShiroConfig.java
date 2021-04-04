@@ -42,11 +42,12 @@ public class ShiroConfig {
         //自定义过滤（关键）
         Map<String, Filter> filters = new HashMap<>();
         filters.put("auth", new AuthFilter());
-        shiroFilter.setFilters(filters);
         shiroFilter.setLoginUrl("/userLogin");
+        shiroFilter.setFilters(filters);
+
         Map<String, String> filterMap = new LinkedHashMap<>();
         //主要是这部分： 不要用这种方法，最好用注解的方法
-//        filterMap.put("/add", "roles[admin]");
+        filterMap.put("/userLogin", "anon");
 //        filterMap.put("/list", "roles[admin,user]");
 //        filterMap.put("/delete", "perms[admin:delete]");
         filterMap.put("/**", "auth");

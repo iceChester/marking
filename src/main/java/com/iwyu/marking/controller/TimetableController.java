@@ -9,13 +9,11 @@ import com.iwyu.marking.service.TimetableService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 /**
@@ -34,10 +32,10 @@ public class TimetableController {
     private TimetableService timetableService;
 
 
-    @GetMapping("/teacherCourse/{id}")
+    @GetMapping("/teacherCourse")
     @RequiresPermissions("teacher")
-    public List<TeacherCourseDTO> teacherCourse(@PathVariable("id") Integer teacher_id){
-        return timetableService.findMyCoures(teacher_id);
+    public List<TeacherCourseDTO> teacherCourse(@RequestParam(value = "id") Integer id){
+        return timetableService.findMyCoures(id);
     }
     @GetMapping("/studentInfo/{page}/{size}/{offerId}")
     public IPage<Student> studentInfo(@PathVariable("page")Long page, @PathVariable("size") Long size, @PathVariable("offerId") Integer offerId){

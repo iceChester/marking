@@ -8,12 +8,9 @@ import com.iwyu.marking.service.CourseService;
 import io.swagger.models.auth.In;
 import jdk.nashorn.internal.objects.annotations.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -33,9 +30,10 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/findAll/{page}/{size}")
-    public IPage<Course> findAll(@PathVariable("page")Long page,@PathVariable("size") Long size){
+    @GetMapping("/findAll")
+    public IPage<Course> findAll(@RequestParam("page")Long page, @RequestParam("size") Long size){
         //分页下标从1开始,不用额外减一
+        System.out.println(page);
         IPage<Course> courseIPage = new Page<>(page,size);
         return courseService.page(courseIPage);
     }
