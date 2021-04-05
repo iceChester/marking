@@ -38,8 +38,8 @@ public class CourseController {
         return courseService.page(courseIPage);
     }
 
-    @GetMapping("/findById/{courseId}")
-    public Course findById(@PathVariable("courseId") Integer id){
+    @GetMapping("/findById")
+    public Course findById(@RequestParam("courseId") Integer id){
         Course course = courseService.getById(id);
         return course;
     }

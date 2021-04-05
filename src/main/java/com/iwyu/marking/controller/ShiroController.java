@@ -58,6 +58,7 @@ public class ShiroController {
             //生成token，并保存到数据库
             result = shiroService.createToken(user.getId());
             result.put("userId",user.getId());
+            result.put("role",user.getRole());
             result.put("status", 200);
             result.put("msg", "登陆成功");
         }

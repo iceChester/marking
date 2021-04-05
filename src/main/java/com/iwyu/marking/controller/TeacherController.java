@@ -8,12 +8,9 @@ import com.iwyu.marking.entity.Teacher;
 import com.iwyu.marking.service.TeacherService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.List;
@@ -33,8 +30,8 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
-    @GetMapping("/likeName/{name}")
-    public List<TeacherDTO> likeName(@PathVariable("name") String name) {
+    @GetMapping("/likeName")
+    public List<TeacherDTO> likeName(@RequestParam("name") String name) {
         QueryWrapper<Teacher> wrapper = new QueryWrapper<>();
         wrapper.like(StringUtils.isNotBlank(name),"teacher_name", name);
         List<Teacher> list = teacherService.list(wrapper);

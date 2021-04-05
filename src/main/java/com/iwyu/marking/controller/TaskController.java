@@ -3,12 +3,9 @@ package com.iwyu.marking.controller;
 
 import com.iwyu.marking.entity.Task;
 import com.iwyu.marking.service.TaskService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -36,8 +33,8 @@ public class TaskController {
         return false;
     }
 
-    @RequestMapping("/findByOfferId/{offerId}")
-    public List<Task> findByOfferId(@PathVariable("offerId") int offerId){
+    @RequestMapping("/findByOfferId")
+    public List<Task> findByOfferId(@RequestParam("offerId") int offerId){
         return taskService.findByOfferId(offerId);
     }
 

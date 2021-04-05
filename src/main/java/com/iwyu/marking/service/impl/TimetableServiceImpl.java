@@ -38,8 +38,8 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     private TimetableMapper timetableMapper;
 
     @Override
-    public List<TeacherCourseDTO> findMyCoures(Integer teacherId) {
-        List<OfferCourses> offerCourses = offerCoursesMapper.findMyCoures(teacherId);
+    public List<TeacherCourseDTO> findMyCourse(Integer teacherId) {
+        List<OfferCourses> offerCourses = offerCoursesMapper.findMyCourse(teacherId);
         List<TeacherCourseDTO> teacherCourseDTOS = new ArrayList<>();
         for (OfferCourses courses :offerCourses) {
             TeacherCourseDTO teacherCourseDTO = new TeacherCourseDTO();

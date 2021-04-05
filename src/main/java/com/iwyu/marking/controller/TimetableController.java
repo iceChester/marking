@@ -35,10 +35,10 @@ public class TimetableController {
     @GetMapping("/teacherCourse")
     @RequiresPermissions("teacher")
     public List<TeacherCourseDTO> teacherCourse(@RequestParam(value = "id") Integer id){
-        return timetableService.findMyCoures(id);
+        return timetableService.findMyCourse(id);
     }
-    @GetMapping("/studentInfo/{page}/{size}/{offerId}")
-    public IPage<Student> studentInfo(@PathVariable("page")Long page, @PathVariable("size") Long size, @PathVariable("offerId") Integer offerId){
+    @GetMapping("/studentInfo")
+    public IPage<Student> studentInfo(@RequestParam("page") Long page, @RequestParam("size") Long size, @RequestParam("offerId") Integer offerId){
         return timetableService.studentInfo(page,size,offerId);
     }
 }
