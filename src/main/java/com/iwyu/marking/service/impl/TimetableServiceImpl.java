@@ -8,11 +8,10 @@ import com.iwyu.marking.dto.TeacherDTO;
 import com.iwyu.marking.entity.OfferCourses;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.Timetable;
-import com.iwyu.marking.mapper.OfferCoursesMapper;
-import com.iwyu.marking.mapper.TeacherMapper;
-import com.iwyu.marking.mapper.TimetableMapper;
+import com.iwyu.marking.mapper.*;
 import com.iwyu.marking.service.TimetableService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.iwyu.marking.utils.Offer2CourseDTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,13 +32,20 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     @Autowired
     private TeacherMapper teacherMapper;
     @Autowired
+    private UserMapper userMapper;
+    @Autowired
     private OfferCoursesMapper offerCoursesMapper;
     @Autowired
     private TimetableMapper timetableMapper;
 
-    @Override
-    public List<TeacherCourseDTO> findMyCourse(Integer teacherId) {
-        List<OfferCourses> offerCourses = offerCoursesMapper.findMyCourse(teacherId);
+    /**
+    *@Description 将课程信息封装打包
+    *@Author XiaoMao
+    *@Date 2021/4/5 21:32
+    *@Param [offerCourses]
+    *Return java.util.List<com.iwyu.marking.dto.TeacherCourseDTO>
+    **/
+    private  List<TeacherCourseDTO> offerCourse2DTO(List<OfferCourses> offerCourses){
         List<TeacherCourseDTO> teacherCourseDTOS = new ArrayList<>();
         for (OfferCourses courses :offerCourses) {
             TeacherCourseDTO teacherCourseDTO = new TeacherCourseDTO();
@@ -50,14 +56,32 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
             if(courses.getAssistantTeacherTwo()!=null){
                 teacherCourseDTO.setAssistantTwoName(teacherMapper.selectById(courses.getAssistantTeacherTwo()).getTeacherName());
             }
-            teacherCourseDTO.setOfferId(courses.getOfferId());
-            teacherCourseDTO.setCourseId(courses.getCourseId());
-            teacherCourseDTO.setCourseName(courses.getCourseName());
-            teacherCourseDTO.setClasses(courses.getClasses());
             teacherCourseDTO.setMemberCount(timetableMapper.countMember(courses.getOfferId()));
+            teacherCourseDTO = Offer2CourseDTOUtil.change(courses,teacherCourseDTO);
             teacherCourseDTOS.add(teacherCourseDTO);
         }
         return teacherCourseDTOS;
+    }
+
+    @Override
+    public List<TeacherCourseDTO> findMyCourse(Integer teacherId) {
+        List<OfferCourses> offerCourses = offerCoursesMapper.findMyCourse(teacherId);
+        return offerCourse2DTO(offerCourses);
+    }
+//需要重构
+    @Override
+    public List<TeacherCourseDTO> findStudentCourse(Integer studentId) {
+        QueryWrapper<Timetable> timetableQueryWrapper = new QueryWrapper<>();
+        timetableQueryWrapper.eq("student_id",studentId);
+        List<Timetable> timetables = timetableMapper.selectList(timetableQueryWrapper);
+        List<Integer> offerIds = new ArrayList<>();
+        for (Timetable timetable :timetables) {
+            offerIds.add(timetable.getOfferId());
+        }
+        QueryWrapper<OfferCourses> offerCoursesQueryWrapper = new QueryWrapper<>();
+        offerCoursesQueryWrapper.in("offer_id",offerIds);
+        List<OfferCourses> offerCourses = offerCoursesMapper.selectList(offerCoursesQueryWrapper);
+        return offerCourse2DTO(offerCourses);
     }
 
     @Override

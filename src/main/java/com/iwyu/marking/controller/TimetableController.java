@@ -41,5 +41,10 @@ public class TimetableController {
     public IPage<Student> studentInfo(@RequestParam("page") Long page, @RequestParam("size") Long size, @RequestParam("offerId") Integer offerId){
         return timetableService.studentInfo(page,size,offerId);
     }
+    @GetMapping("/studentCourse")
+    @RequiresPermissions("student")
+    public List<TeacherCourseDTO> studentCourse(@RequestParam(value = "id") Integer id){
+        return timetableService.findStudentCourse(id);
+    }
 }
 

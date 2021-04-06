@@ -6,11 +6,19 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iwyu.marking.dto.LoginDTO;
+import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.Teacher;
 import com.iwyu.marking.entity.User;
 //import com.iwyu.marking.service.ShiroService;
+import com.iwyu.marking.mapper.UserMapper;
 import com.iwyu.marking.service.ShiroService;
+import com.iwyu.marking.service.StudentService;
+import com.iwyu.marking.service.TeacherService;
+import com.iwyu.marking.service.UserService;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +35,14 @@ import org.springframework.web.bind.annotation.*;
 public class ShiroController {
 
     private final ShiroService shiroService;
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private StudentService studentService;
+
+
 
     public ShiroController(ShiroService shiroService) {
         this.shiroService = shiroService;
@@ -56,9 +72,20 @@ public class ShiroController {
             result.put("msg", "账号或密码有误");
         } else {
             //生成token，并保存到数据库
+            Integer roleId ;
             result = shiroService.createToken(user.getId());
             result.put("userId",user.getId());
             result.put("role",user.getRole());
+            if(user.getRole().equals("teacher")){
+                QueryWrapper<Teacher> teacherQueryWrapper = new QueryWrapper<>();
+                teacherQueryWrapper.eq("account",user.getAccount());
+                roleId = teacherService.getOne(teacherQueryWrapper).getTeacherId();
+            }else {
+                QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
+                studentQueryWrapper.eq("account",user.getAccount());
+                roleId = studentService.getOne(studentQueryWrapper).getStudentId();
+            }
+            result.put("roleId",roleId);
             result.put("status", 200);
             result.put("msg", "登陆成功");
         }
