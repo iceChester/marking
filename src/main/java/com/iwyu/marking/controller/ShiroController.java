@@ -73,19 +73,26 @@ public class ShiroController {
         } else {
             //生成token，并保存到数据库
             Integer roleId ;
+            String userName = new String();
             result = shiroService.createToken(user.getId());
             result.put("userId",user.getId());
+            result.put("account",user.getAccount());
             result.put("role",user.getRole());
             if(user.getRole().equals("teacher")){
                 QueryWrapper<Teacher> teacherQueryWrapper = new QueryWrapper<>();
                 teacherQueryWrapper.eq("account",user.getAccount());
-                roleId = teacherService.getOne(teacherQueryWrapper).getTeacherId();
+                Teacher teacher = teacherService.getOne(teacherQueryWrapper);
+                roleId = teacher.getTeacherId();
+                userName = teacher.getTeacherName();
             }else {
                 QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
                 studentQueryWrapper.eq("account",user.getAccount());
-                roleId = studentService.getOne(studentQueryWrapper).getStudentId();
+                Student student = studentService.getOne(studentQueryWrapper);
+                roleId = student.getStudentId();
+                userName = student.getStudentName();
             }
             result.put("roleId",roleId);
+            result.put("userName",userName);
             result.put("status", 200);
             result.put("msg", "登陆成功");
         }
