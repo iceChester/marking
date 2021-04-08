@@ -21,7 +21,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         this.setFieldValByName("version",new Long(1),metaObject);
-        this.setFieldValByName("deleted",new Long(0),metaObject);
+        this.setFieldValByName("deleted",new Integer(0),metaObject);
     }
 
     @Override

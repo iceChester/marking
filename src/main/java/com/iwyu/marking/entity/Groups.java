@@ -20,13 +20,13 @@ import lombok.experimental.Accessors;
 @Data
   @EqualsAndHashCode(callSuper = false)
   @Accessors(chain = true)
-@ApiModel(value="Group对象", description="")
-public class Group implements Serializable {
+@ApiModel(value="Groups对象", description="")
+public class Groups implements Serializable {
 
     private static final long serialVersionUID=1L;
 
       @ApiModelProperty(value = "小组id")
-      @TableId(value = "group_id", type = IdType.AUTO)
+//      @TableId(value = "group_id", type = IdType.AUTO)
         private Integer groupId;
 
       @ApiModelProperty(value = "开课id")
@@ -35,8 +35,8 @@ public class Group implements Serializable {
       @ApiModelProperty(value = "组名")
       private String groupName;
 
-      @ApiModelProperty(value = "组长")
-      private Integer leaderId;
+//      @ApiModelProperty(value = "组长")
+//      private Integer leaderId;
 
       @TableField(fill = FieldFill.INSERT)
       @TableLogic

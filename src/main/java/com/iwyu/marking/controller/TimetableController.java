@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import javax.annotation.Resource;
 import javax.websocket.server.PathParam;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
 @RequestMapping("/timetable")
 public class TimetableController {
 
-    @Autowired
+    @Resource
     private TimetableService timetableService;
 
 
@@ -38,7 +39,7 @@ public class TimetableController {
         return timetableService.findMyCourse(id);
     }
     @GetMapping("/studentInfo")
-    public IPage<Student> studentInfo(@RequestParam("page") Long page, @RequestParam("size") Long size, @RequestParam("offerId") Integer offerId){
+    public IPage<Student> studentInfo(@RequestParam(value = "page") Long page, @RequestParam(value = "size") Long size, @RequestParam(value = "offerId") Integer offerId){
         return timetableService.studentInfo(page,size,offerId);
     }
     @GetMapping("/studentCourse")

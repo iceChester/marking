@@ -3,11 +3,12 @@ package com.iwyu.marking.controller;
 
 import com.iwyu.marking.dto.GroupInfoDTO;
 import com.iwyu.marking.service.GroupInfoService;
-import com.iwyu.marking.service.GroupService;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -19,14 +20,14 @@ import javax.annotation.Resource;
  * @author Chester
  * @since 2021-02-06
  */
-@Controller
+@RestController
 @RequestMapping("/groupInfo")
 public class GroupInfoController {
 
     @Resource
     private GroupInfoService groupInfoService;
 
-    @RequestMapping("/checkStudentGroup")
+    @GetMapping("/checkStudentGroup")
     public GroupInfoDTO checkStudentGroup(@RequestParam("offerId") Integer offerId ,@RequestParam("account") String account){
         return groupInfoService.checkStudentGroup(offerId,account);
     }

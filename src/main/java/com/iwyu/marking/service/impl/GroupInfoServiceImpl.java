@@ -2,12 +2,13 @@ package com.iwyu.marking.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iwyu.marking.dto.GroupInfoDTO;
-import com.iwyu.marking.entity.Group;
 import com.iwyu.marking.entity.GroupInfo;
+import com.iwyu.marking.entity.Groups;
 import com.iwyu.marking.mapper.GroupInfoMapper;
-import com.iwyu.marking.mapper.GroupMapper;
+import com.iwyu.marking.mapper.GroupsMapper;
 import com.iwyu.marking.service.GroupInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.iwyu.marking.service.GroupsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,58 +30,47 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
     private GroupInfoMapper infoMapper;
 
     @Resource
-    private GroupMapper groupMapper;
+    GroupsService groupsService;
 
     @Override
-    public GroupInfoDTO checkStudentGroup(Integer offerId, String account) {
-        GroupInfoDTO groupInfoDTO = new GroupInfoDTO();
+    public GroupInfo checkMember(Integer offerId, String account) {
         QueryWrapper<GroupInfo> groupInfoQueryWrapper = new QueryWrapper<>();
         groupInfoQueryWrapper.eq("offer_id",offerId);
         groupInfoQueryWrapper.eq("member_account",account);
-        GroupInfo groupInfo = infoMapper.selectOne(groupInfoQueryWrapper);
+        return infoMapper.selectOne(groupInfoQueryWrapper);
+    }
+
+    @Override
+    public List<GroupInfo> groupList(Integer offerId, Integer groupId) {
+        QueryWrapper<GroupInfo> infoQuery = new QueryWrapper<>();
+        infoQuery.eq("offer_id",offerId);
+        infoQuery.eq("group_id",groupId);
+        return infoMapper.selectList(infoQuery);
+    }
+
+    @Override
+    public GroupInfoDTO checkStudentGroup(Integer offerId, String account) {
+        GroupInfo groupInfo = checkMember(offerId,account);
+        String leaderName = "";
+        String groupName = "";
+        List<GroupInfo> groupInfoList;
         if(groupInfo==null){
-            QueryWrapper<Group> groupQueryWrapper = new QueryWrapper<>();
-            groupQueryWrapper.eq("offer_id",offerId);
-            groupQueryWrapper.eq("leader_account",account);
-            Group group = groupMapper.selectOne(groupQueryWrapper);
+            Groups group = groupsService.checkLeader(offerId,account);
             if(group==null){
                 return null;
             }else{
-                groupInfoDTO.setGroupName(group.getGroupName());
-                groupInfoDTO.setLeaderName(group.getLeaderName());
-                QueryWrapper<GroupInfo> infoQuery = new QueryWrapper<>();
-                infoQuery.eq("offer_id",offerId);
-                infoQuery.eq("group_id",group.getGroupId());
-                List<GroupInfo> groupInfoList = infoMapper.selectList(infoQuery);
-                List<String> memberAccount = new ArrayList<>();
-                List<String> memberName = new ArrayList<>();
-                for (GroupInfo info :groupInfoList) {
-                    memberAccount.add(info.getMemberAccount());
-                    memberName.add(info.getMemberName());
-                }
-                groupInfoDTO.setMemberAccount(memberAccount);
-                groupInfoDTO.setMemberName(memberName);
+                //是组长
+                groupInfoList = groupList(offerId,group.getGroupId());
+                leaderName = group.getLeaderName();
+                groupName = group.getGroupName();
             }
         }else {
-            QueryWrapper<Group> groupQuery = new QueryWrapper<>();
-            groupQuery.eq("offer_id",offerId);
-            groupQuery.eq("group_id",groupInfo.getGroupId());
-            Group group = groupMapper.selectOne(groupQuery);
-            groupInfoDTO.setGroupName(group.getGroupName());
-            groupInfoDTO.setLeaderName(group.getLeaderName());
-            QueryWrapper<GroupInfo> InfoWrapper = new QueryWrapper<>();
-            InfoWrapper.eq("offer_id",offerId);
-            InfoWrapper.eq("group_id",groupInfo.getGroupId());
-            List<GroupInfo> groupInfoList = infoMapper.selectList(InfoWrapper);
-            List<String> memberAccount = new ArrayList<>();
-            List<String> memberName = new ArrayList<>();
-            for (GroupInfo info :groupInfoList) {
-                memberAccount.add(info.getMemberAccount());
-                memberName.add(info.getMemberName());
-            }
-            groupInfoDTO.setMemberAccount(memberAccount);
-            groupInfoDTO.setMemberName(memberName);
+            //是小组成员
+            Groups group = groupsService.checkLeader(offerId,account);
+            groupInfoList = groupList(offerId,group.getGroupId());
+            leaderName = group.getLeaderName();
+            groupName = group.getGroupName();
         }
-        return groupInfoDTO;
+        return new GroupInfoDTO(leaderName,groupName,groupInfoList);
     }
 }

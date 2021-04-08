@@ -16,6 +16,7 @@ import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,13 +31,13 @@ import java.util.List;
 @Service
 public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, OfferCourses> implements OfferCoursesService {
 
-    @Autowired
+    @Resource
     private OfferCoursesMapper offerMapper;
 
-    @Autowired
+    @Resource
     private StudentMapper studentMapper;
 
-    @Autowired
+    @Resource
     private TimetableService timetableService;
 
     //后期把事务加上,保存开课信息和添加学生要同步
@@ -45,17 +46,19 @@ public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, Off
         OfferCourses offerCourses = OfferCourseDTO.saveChange(dto);
         offerMapper.insert(offerCourses);
         Integer offerId = offerCourses.getOfferId();
-        List<Timetable> timetables = new ArrayList<>();
+        List<Timetable> timetableList = new ArrayList<>();
         QueryWrapper<Student> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("class_name",dto.getClasses());
-        List<Student> students =  studentMapper.selectList(queryWrapper);
-        for (Student student :students) {
+        List<Student> studentList =  studentMapper.selectList(queryWrapper);
+        for (Student student :studentList) {
             Timetable timetable = new Timetable();
             timetable.setStudentId(student.getStudentId());
             timetable.setOfferId(offerId);
-            timetables.add(timetable);
+            timetable.setAccount(student.getAccount());
+            timetable.setStudentName(student.getStudentName());
+            timetableList.add(timetable);
         }
-        if(timetableService.saveBatch(timetables)){
+        if(timetableService.saveBatch(timetableList)){
             return true;
         }
         return false;
