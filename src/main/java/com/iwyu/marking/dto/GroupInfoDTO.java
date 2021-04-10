@@ -4,6 +4,7 @@ import com.iwyu.marking.entity.GroupInfo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +16,7 @@ import java.util.List;
  **/
 @Data
 public class GroupInfoDTO implements Serializable {
+    private Integer groupId;
     private String leaderName;
     private String groupName;
     private List<String> memberAccount;
@@ -24,12 +26,18 @@ public class GroupInfoDTO implements Serializable {
 
     }
 
-    public GroupInfoDTO(String leaderName, String groupName, List<GroupInfo> groupInfoList) {
+    public GroupInfoDTO(Integer groupId,String leaderName, String groupName, List<GroupInfo> groupInfoList) {
+        List<String> account = new ArrayList<>();
+        List<String> name = new ArrayList<>();
+        for (GroupInfo info :groupInfoList) {
+            System.out.println(info);
+            account.add(info.getMemberAccount());
+            name.add(info.getMemberName());
+        }
+        this.memberAccount = account;
+        this.memberName = name;
+        this.groupId = groupId;
         this.leaderName = leaderName;
         this.groupName = groupName;
-        for (GroupInfo info :groupInfoList) {
-            this.memberAccount.add(info.getMemberAccount());
-            this.memberName.add(info.getMemberName());
-        }
     }
 }

@@ -15,6 +15,7 @@ import com.iwyu.marking.utils.Offer2CourseDTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,13 +30,12 @@ import java.util.List;
 @Service
 public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable> implements TimetableService {
 
-    @Autowired
+    @Resource
     private TeacherMapper teacherMapper;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
+
+    @Resource
     private OfferCoursesMapper offerCoursesMapper;
-    @Autowired
+    @Resource
     private TimetableMapper timetableMapper;
 
     /**
@@ -70,17 +70,20 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     }
 //需要重构
     @Override
-    public List<TeacherCourseDTO> findStudentCourse(Integer studentId) {
+    public List<TeacherCourseDTO> findStudentCourse(String account) {
         QueryWrapper<Timetable> timetableQueryWrapper = new QueryWrapper<>();
-        timetableQueryWrapper.eq("student_id",studentId);
+        timetableQueryWrapper.eq("account",account);
         List<Timetable> timetables = timetableMapper.selectList(timetableQueryWrapper);
         List<Integer> offerIds = new ArrayList<>();
         for (Timetable timetable :timetables) {
             offerIds.add(timetable.getOfferId());
         }
-        QueryWrapper<OfferCourses> offerCoursesQueryWrapper = new QueryWrapper<>();
-        offerCoursesQueryWrapper.in("offer_id",offerIds);
-        List<OfferCourses> offerCourses = offerCoursesMapper.selectList(offerCoursesQueryWrapper);
+        List<OfferCourses> offerCourses = new ArrayList<>();
+        if(offerIds.size()!= 0){
+            QueryWrapper<OfferCourses> offerCoursesQueryWrapper = new QueryWrapper<>();
+            offerCoursesQueryWrapper.in("offer_id",offerIds);
+            offerCourses = offerCoursesMapper.selectList(offerCoursesQueryWrapper);
+        }
         return offerCourse2DTO(offerCourses);
     }
 

@@ -3,6 +3,8 @@ package com.iwyu.marking.service;
 import com.iwyu.marking.dto.GroupInfoDTO;
 import com.iwyu.marking.entity.GroupInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.Timetable;
 
 import java.util.List;
 
@@ -21,4 +23,6 @@ public interface GroupInfoService extends IService<GroupInfo> {
     GroupInfo checkMember(Integer offerId , String account);
     //获取某课程某小组的小组成员（通过开课id和小组id）
     List<GroupInfo> groupList(Integer offerId ,Integer groupId);
+    //获取某一门课程中没有小组的学生
+    List<Timetable> noGroupStudent(Integer offerId);
 }

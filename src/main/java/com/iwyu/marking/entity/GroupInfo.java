@@ -35,9 +35,6 @@ public class GroupInfo implements Serializable {
       @ApiModelProperty(value = "开课id")
       private Integer offerId;
 
-      @ApiModelProperty(value = " 成员id")
-      private Integer memberId;
-
       @ApiModelProperty(value = "成员名")
       private String memberName;
 

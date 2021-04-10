@@ -30,7 +30,7 @@ public class StudentTask implements Serializable {
       private Integer studentTaskId;
 
       @ApiModelProperty(value = " 学号")
-      private Integer studentId;
+      private String account;
 
       @ApiModelProperty(value = " 作业号")
       private Integer taskId;

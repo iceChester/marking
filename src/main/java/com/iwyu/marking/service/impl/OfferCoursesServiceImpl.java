@@ -52,7 +52,6 @@ public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, Off
         List<Student> studentList =  studentMapper.selectList(queryWrapper);
         for (Student student :studentList) {
             Timetable timetable = new Timetable();
-            timetable.setStudentId(student.getStudentId());
             timetable.setOfferId(offerId);
             timetable.setAccount(student.getAccount());
             timetable.setStudentName(student.getStudentName());

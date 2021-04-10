@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iwyu.marking.dto.GroupInfoDTO;
 import com.iwyu.marking.entity.GroupInfo;
 import com.iwyu.marking.entity.Groups;
+import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.mapper.GroupInfoMapper;
 import com.iwyu.marking.mapper.GroupsMapper;
+import com.iwyu.marking.mapper.TimetableMapper;
 import com.iwyu.marking.service.GroupInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.iwyu.marking.service.GroupsService;
@@ -30,6 +33,9 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
     private GroupInfoMapper infoMapper;
 
     @Resource
+    private TimetableMapper timetableMapper;
+
+    @Resource
     GroupsService groupsService;
 
     @Override
@@ -51,6 +57,7 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
     @Override
     public GroupInfoDTO checkStudentGroup(Integer offerId, String account) {
         GroupInfo groupInfo = checkMember(offerId,account);
+        Integer groupId = null;
         String leaderName = "";
         String groupName = "";
         List<GroupInfo> groupInfoList;
@@ -60,17 +67,35 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
                 return null;
             }else{
                 //是组长
-                groupInfoList = groupList(offerId,group.getGroupId());
+                groupId = group.getGroupId();
+                groupInfoList = groupList(offerId,groupId);
                 leaderName = group.getLeaderName();
                 groupName = group.getGroupName();
             }
         }else {
             //是小组成员
             Groups group = groupsService.checkLeader(offerId,account);
-            groupInfoList = groupList(offerId,group.getGroupId());
+            groupId = group.getGroupId();
+            groupInfoList = groupList(offerId,groupId);
             leaderName = group.getLeaderName();
             groupName = group.getGroupName();
         }
-        return new GroupInfoDTO(leaderName,groupName,groupInfoList);
+        return new GroupInfoDTO(groupId,leaderName,groupName,groupInfoList);
+    }
+
+    @Override
+    public List<Timetable> noGroupStudent(Integer offerId) {
+        List<Timetable> noGroup = new ArrayList<>();
+        QueryWrapper<Timetable> query = new QueryWrapper<>();
+        query.eq("offer_id",offerId);
+        List<Timetable> timetableList = timetableMapper.selectList(query);
+        for (Timetable timetable :timetableList) {
+            if(groupsService.checkLeader(offerId,timetable.getAccount())==null){
+                if(checkMember(offerId,timetable.getAccount())==null){
+                    noGroup.add(timetable);
+                }
+            }
+        }
+        return noGroup;
     }
 }

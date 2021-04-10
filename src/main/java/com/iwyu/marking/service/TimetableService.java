@@ -24,5 +24,5 @@ public interface TimetableService extends IService<Timetable> {
     //查询课程学生名单
     IPage<Student> studentInfo(Long page, Long size, Integer offerId);
     //学生查询自己的课程
-    List<TeacherCourseDTO> findStudentCourse(Integer studentId);
+    List<TeacherCourseDTO> findStudentCourse(String account);
 }

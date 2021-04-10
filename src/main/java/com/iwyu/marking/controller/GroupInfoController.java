@@ -2,15 +2,17 @@ package com.iwyu.marking.controller;
 
 
 import com.iwyu.marking.dto.GroupInfoDTO;
+import com.iwyu.marking.entity.GroupInfo;
+import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.service.GroupInfoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.models.auth.In;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * <p>
@@ -30,6 +32,16 @@ public class GroupInfoController {
     @GetMapping("/checkStudentGroup")
     public GroupInfoDTO checkStudentGroup(@RequestParam("offerId") Integer offerId ,@RequestParam("account") String account){
         return groupInfoService.checkStudentGroup(offerId,account);
+    }
+
+    @GetMapping("/noGroupStudent")
+    public List<Timetable> noGroupStudent(@RequestParam("offerId") Integer offerId){
+        return groupInfoService.noGroupStudent(offerId);
+    }
+
+    @PostMapping("/save")
+    public boolean save(@RequestBody List<GroupInfo> groupInfoList){
+        return groupInfoService.saveBatch(groupInfoList);
     }
 }
 

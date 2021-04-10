@@ -44,8 +44,8 @@ public class TimetableController {
     }
     @GetMapping("/studentCourse")
     @RequiresPermissions("student")
-    public List<TeacherCourseDTO> studentCourse(@RequestParam(value = "id") Integer id){
-        return timetableService.findStudentCourse(id);
+    public List<TeacherCourseDTO> studentCourse(@RequestParam(value = "account") String account){
+        return timetableService.findStudentCourse(account);
     }
 }
 

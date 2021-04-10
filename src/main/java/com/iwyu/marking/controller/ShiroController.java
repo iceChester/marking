@@ -76,7 +76,8 @@ public class ShiroController {
             String userName = new String();
             result = shiroService.createToken(user.getId());
             result.put("userId",user.getId());
-            result.put("account",user.getAccount());
+            result.put("account",account);
+            System.out.println(account);
             result.put("role",user.getRole());
             if(user.getRole().equals("teacher")){
                 QueryWrapper<Teacher> teacherQueryWrapper = new QueryWrapper<>();

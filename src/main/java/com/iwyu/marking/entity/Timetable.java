@@ -32,9 +32,6 @@ public class Timetable implements Serializable {
       @ApiModelProperty(value = "课程id")
       private Integer offerId;
 
-      @ApiModelProperty(value = "学生id")
-      private Integer studentId;
-
       private String account;
 
       private String studentName;
