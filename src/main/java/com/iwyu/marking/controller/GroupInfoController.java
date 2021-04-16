@@ -1,6 +1,7 @@
 package com.iwyu.marking.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.GroupInfoDTO;
 import com.iwyu.marking.entity.GroupInfo;
 import com.iwyu.marking.entity.Student;
@@ -42,6 +43,10 @@ public class GroupInfoController {
     @PostMapping("/save")
     public boolean save(@RequestBody List<GroupInfo> groupInfoList){
         return groupInfoService.saveBatch(groupInfoList);
+    }
+    @GetMapping("/courseGroups")
+    public IPage<GroupInfoDTO> courseGroups(@RequestParam(value = "page") Long page, @RequestParam(value = "size") Long size, @RequestParam("offerId") Integer offerId){
+        return groupInfoService.findAllGroupByOfferId(page,size,offerId);
     }
 }
 

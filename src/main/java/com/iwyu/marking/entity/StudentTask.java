@@ -38,6 +38,12 @@ public class StudentTask implements Serializable {
       @ApiModelProperty(value = " 作业文件名")
       private String fileName;
 
+      @ApiModelProperty(value = " 图片作业")
+      private String imgFile;
+
+      @ApiModelProperty(value = " 视频作业")
+      private String videoFile;
+
       @ApiModelProperty(value = " 提交日期")
       private String submitDate;
 

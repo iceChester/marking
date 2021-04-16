@@ -4,11 +4,10 @@ package com.iwyu.marking.controller;
 
 import com.iwyu.marking.entity.Groups;
 import com.iwyu.marking.service.GroupsService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.boot.context.event.EventPublishingRunListener;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -27,7 +26,7 @@ public class GroupsController {
     @Resource
     private GroupsService groupsService;
 
-    @RequestMapping("/create")
+    @PostMapping("/create")
     public Integer create(@RequestBody Groups group){
 //        group.setDeleted(0);
         System.out.println(group);
@@ -35,6 +34,14 @@ public class GroupsController {
             return group.getGroupId();
         }
         return  null;
+    }
+    @RequestMapping("/checkLeader")
+    public boolean checkLeader(@RequestParam("offerId") Integer offerId,@RequestParam("account") String account){
+        Groups groups = groupsService.checkLeader(offerId,account);
+        if(groups==null){
+            return false;
+        }
+        return true;
     }
 }
 

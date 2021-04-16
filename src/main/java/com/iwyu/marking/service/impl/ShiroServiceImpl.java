@@ -18,6 +18,7 @@ import com.iwyu.marking.service.ShiroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +27,9 @@ import java.util.Map;
 public class ShiroServiceImpl implements ShiroService {
 
 
-    @Autowired
+    @Resource
     private UserMapper userMapper;
-    @Autowired
+    @Resource
     private SysTokenMapper sysTokenMapper;
 
     /**

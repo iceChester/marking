@@ -30,7 +30,6 @@ public class GroupInfoDTO implements Serializable {
         List<String> account = new ArrayList<>();
         List<String> name = new ArrayList<>();
         for (GroupInfo info :groupInfoList) {
-            System.out.println(info);
             account.add(info.getMemberAccount());
             name.add(info.getMemberName());
         }

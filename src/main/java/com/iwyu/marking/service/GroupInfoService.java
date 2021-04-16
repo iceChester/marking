@@ -1,5 +1,6 @@
 package com.iwyu.marking.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.GroupInfoDTO;
 import com.iwyu.marking.entity.GroupInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -25,4 +26,7 @@ public interface GroupInfoService extends IService<GroupInfo> {
     List<GroupInfo> groupList(Integer offerId ,Integer groupId);
     //获取某一门课程中没有小组的学生
     List<Timetable> noGroupStudent(Integer offerId);
+
+    //获取某一门课程的所有小组
+    IPage<GroupInfoDTO> findAllGroupByOfferId(Long page, Long size, Integer offerId);
 }

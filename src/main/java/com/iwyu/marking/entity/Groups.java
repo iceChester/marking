@@ -26,7 +26,7 @@ public class Groups implements Serializable {
     private static final long serialVersionUID=1L;
 
       @ApiModelProperty(value = "小组id")
-//      @TableId(value = "group_id", type = IdType.AUTO)
+      @TableId(value = "group_id", type = IdType.AUTO)
         private Integer groupId;
 
       @ApiModelProperty(value = "开课id")

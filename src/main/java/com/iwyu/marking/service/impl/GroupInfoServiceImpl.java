@@ -1,6 +1,8 @@
 package com.iwyu.marking.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iwyu.marking.dto.GroupInfoDTO;
 import com.iwyu.marking.entity.GroupInfo;
 import com.iwyu.marking.entity.Groups;
@@ -61,8 +63,8 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
         String leaderName = "";
         String groupName = "";
         List<GroupInfo> groupInfoList;
+        Groups group = groupsService.checkLeader(offerId,account);
         if(groupInfo==null){
-            Groups group = groupsService.checkLeader(offerId,account);
             if(group==null){
                 return null;
             }else{
@@ -74,11 +76,13 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
             }
         }else {
             //是小组成员
-            Groups group = groupsService.checkLeader(offerId,account);
-            groupId = group.getGroupId();
+            groupId = groupInfo.getGroupId();
+            //获取小组成员
             groupInfoList = groupList(offerId,groupId);
-            leaderName = group.getLeaderName();
-            groupName = group.getGroupName();
+            //获取组长和组名
+            Groups groupLeader = groupsService.getById(groupId);
+            leaderName = groupLeader.getLeaderName();
+            groupName = groupLeader.getGroupName();
         }
         return new GroupInfoDTO(groupId,leaderName,groupName,groupInfoList);
     }
@@ -97,5 +101,31 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
             }
         }
         return noGroup;
+    }
+
+    @Override
+    public IPage<GroupInfoDTO> findAllGroupByOfferId(Long page, Long size,Integer offerId) {
+        Page<GroupInfoDTO> groupInfoDTOIPage = new Page<>(page,size);
+        List<GroupInfoDTO> groupInfoDTOList = new ArrayList<>();
+        QueryWrapper<Groups> query = new QueryWrapper<>();
+        query.eq("offer_id",offerId);
+        List<Groups> groupsList = groupsService.list(query);
+        int count = groupsList.size();
+        //计算当前页第一条数据的下标
+        int current = page.intValue();
+        int currId = current>1 ? (int) ((current - 1) * size) :0;
+        for (int i=0; i<size && i<count - currId;i++){
+            QueryWrapper<GroupInfo> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("group_id",groupsList.get(currId+i).getGroupId());
+            List<GroupInfo> groupInfoList = infoMapper.selectList(queryWrapper);
+            GroupInfoDTO groupInfoDTO = new GroupInfoDTO(groupsList.get(currId+i).getGroupId(),groupsList.get(currId+i).getLeaderName(),groupsList.get(currId+i).getGroupName(),groupInfoList);
+            groupInfoDTOList.add(groupInfoDTO);
+        }
+        groupInfoDTOIPage.setSize(size);
+        groupInfoDTOIPage.setCurrent(current);
+        groupInfoDTOIPage.setRecords(groupInfoDTOList);
+        groupInfoDTOIPage.setTotal(count);
+        groupInfoDTOIPage.setPages(count %10 == 0 ? count/10 :count/10+1);
+        return groupInfoDTOIPage;
     }
 }
