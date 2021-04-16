@@ -1,5 +1,6 @@
 package com.iwyu.marking.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.StudentTask;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -20,4 +21,7 @@ public interface StudentTaskService extends IService<StudentTask> {
     List<StudentTaskDTO> studentTasks(Integer offerId,String account);
 
     StudentTask getTask(Integer taskId,String account);
+
+    //教师获取某一门课程的学生作业
+    IPage<StudentTask> studentTaskList(Long page, Long size, Integer taskId);
 }

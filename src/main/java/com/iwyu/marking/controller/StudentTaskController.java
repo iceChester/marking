@@ -2,6 +2,7 @@ package com.iwyu.marking.controller;
 
 
 import cn.hutool.core.io.FileTypeUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.StudentTask;
 import com.iwyu.marking.service.StudentTaskService;
@@ -54,11 +55,16 @@ public class StudentTaskController {
         return studentTaskService.studentTasks(offerId, account);
     }
 
+    @GetMapping("/courseTaskList")
+    public IPage<StudentTask> courseTaskList(@RequestParam(value = "page") Long page, @RequestParam(value = "size") Long size, @RequestParam("taskId") Integer taskId){
+        return studentTaskService.studentTaskList(page,size,taskId);
+    }
+
     @PostMapping("/uploadTask")
     public boolean uploadFile(@RequestParam("file") MultipartFile[] file, @RequestParam("taskId") Integer taskId,@RequestParam("account") String account) {
         //添加工具类没有定义的文件类型
         FileTypeUtil.putFileType("D0CF11E0", "doc");
-        String rootPath = "D:/attachment/";
+        String rootPath = "D:/TEST/vue/marking/public/studentTask/";
         Integer offerId = taskService.getById(taskId).getOfferId();
         rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
         File fileDir = new File(rootPath);

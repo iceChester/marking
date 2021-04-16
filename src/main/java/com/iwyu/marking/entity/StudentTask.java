@@ -1,6 +1,7 @@
 package com.iwyu.marking.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -58,6 +59,12 @@ public class StudentTask implements Serializable {
 
       @ApiModelProperty(value = " 总分")
       private Float scoreTotal;
+
+      @TableField(exist = false)
+      private String studentName;
+
+      @TableField(exist = false)
+      private String className;
 
 
 }
