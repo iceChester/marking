@@ -12,6 +12,7 @@ import com.iwyu.marking.service.StudentService;
 import com.iwyu.marking.service.StudentTaskService;
 import com.iwyu.marking.service.TaskService;
 
+import com.iwyu.marking.utils.FileUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -180,7 +181,7 @@ public class StudentTaskController {
             studentTask.setStudentName(student.getStudentName());
         }
         //导出操作
-//        ExcelUtil.exportExcel(studentTaskList,"成绩单","课程成绩",StudentTask.class,"xxx.xls",response);
+        FileUtil.exportExcel(studentTaskList,"成绩单","课程成绩",StudentTask.class,"xxx.xls",response);
     }
 
 }
