@@ -27,6 +27,7 @@ public class TaskController {
 
     @RequestMapping("/save")
     public boolean save(@RequestBody Task task){
+        System.out.println(task);
         if(taskService.save(task)){
             return true;
         }

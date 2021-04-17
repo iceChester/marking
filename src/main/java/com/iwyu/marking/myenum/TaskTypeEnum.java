@@ -9,8 +9,8 @@ import lombok.Getter;
  */
 @Getter
 public enum TaskTypeEnum {
-    PRIVATE (1,"个人作业"),
-    GROUP(2,"小组作业");
+    PRIVATE (0,"个人作业"),
+    GROUP(1,"小组作业");
 
     @EnumValue
     private Integer code;

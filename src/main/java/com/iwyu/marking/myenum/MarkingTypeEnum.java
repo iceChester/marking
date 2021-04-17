@@ -9,8 +9,8 @@ import lombok.Getter;
  */
 @Getter
 public enum MarkingTypeEnum {
-    MAIN_MARKING(1,"主教师评分"),
-    COOPERATION_MARKING(2,"合作评分");
+    MAIN_MARKING(0,"主教师评分"),
+    COOPERATION_MARKING(1,"合作评分");
 
     @EnumValue
     private Integer code;

@@ -33,13 +33,13 @@ public class OfferCourses implements Serializable {
       private Integer courseId;
 
       @ApiModelProperty(value = "主要授课教师")
-      private Integer mainTeacherId;
+      private String mainTeacher;
 
       @ApiModelProperty(value = "助教1")
-      private Integer assistantTeacherOne;
+      private String assistantTeacherOne;
 
       @ApiModelProperty(value = "助教2")
-      private Integer assistantTeacherTwo;
+      private String assistantTeacherTwo;
 
       @ApiModelProperty(value = "班级，用逗号隔开")
       private String classes;

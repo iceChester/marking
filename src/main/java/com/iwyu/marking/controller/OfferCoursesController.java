@@ -3,6 +3,7 @@ package com.iwyu.marking.controller;
 
 import com.iwyu.marking.dto.OfferCourseDTO;
 import com.iwyu.marking.entity.OfferCourses;
+import com.iwyu.marking.entity.Teacher;
 import com.iwyu.marking.service.OfferCoursesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+
+import java.util.List;
 
 /**
  * <p>
@@ -48,5 +51,9 @@ public class OfferCoursesController {
         return "offerCourse";
     }
 
+    @GetMapping("/findTeacher")
+    public List<Teacher> findTeacher(@RequestParam("offerId") Integer offerId){
+        return offerCoursesService.findTeacher(offerId);
+    }
 }
 

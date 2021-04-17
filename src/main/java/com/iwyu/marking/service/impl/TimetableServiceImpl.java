@@ -7,6 +7,7 @@ import com.iwyu.marking.dto.TeacherCourseDTO;
 import com.iwyu.marking.dto.TeacherDTO;
 import com.iwyu.marking.entity.OfferCourses;
 import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.Teacher;
 import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.mapper.*;
 import com.iwyu.marking.service.TimetableService;
@@ -49,12 +50,18 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
         List<TeacherCourseDTO> teacherCourseDTOS = new ArrayList<>();
         for (OfferCourses courses :offerCourses) {
             TeacherCourseDTO teacherCourseDTO = new TeacherCourseDTO();
-            teacherCourseDTO.setMainTeacherName(teacherMapper.selectById(courses.getMainTeacherId()).getTeacherName());
+            QueryWrapper<Teacher> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("account",courses.getMainTeacher());
+            teacherCourseDTO.setMainTeacherName(teacherMapper.selectOne(queryWrapper).getTeacherName());
             if(courses.getAssistantTeacherOne()!=null){
-                teacherCourseDTO.setAssistantOneName(teacherMapper.selectById(courses.getAssistantTeacherOne()).getTeacherName());
+                QueryWrapper<Teacher> queryWrapperOne = new QueryWrapper<>();
+                queryWrapperOne.eq("account",courses.getAssistantTeacherOne());
+                teacherCourseDTO.setAssistantOneName(teacherMapper.selectOne(queryWrapperOne).getTeacherName());
             }
             if(courses.getAssistantTeacherTwo()!=null){
-                teacherCourseDTO.setAssistantTwoName(teacherMapper.selectById(courses.getAssistantTeacherTwo()).getTeacherName());
+                QueryWrapper<Teacher> queryWrapperTwo = new QueryWrapper<>();
+                queryWrapperTwo.eq("account",courses.getAssistantTeacherTwo());
+                teacherCourseDTO.setAssistantTwoName(teacherMapper.selectOne(queryWrapperTwo).getTeacherName());
             }
             teacherCourseDTO.setMemberCount(timetableMapper.countMember(courses.getOfferId()));
             teacherCourseDTO = Offer2CourseDTOUtil.change(courses,teacherCourseDTO);
@@ -64,8 +71,8 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     }
 
     @Override
-    public List<TeacherCourseDTO> findMyCourse(Integer teacherId) {
-        List<OfferCourses> offerCourses = offerCoursesMapper.findMyCourse(teacherId);
+    public List<TeacherCourseDTO> findMyCourse(String account) {
+        List<OfferCourses> offerCourses = offerCoursesMapper.findMyCourse(account);
         return offerCourse2DTO(offerCourses);
     }
 //需要重构

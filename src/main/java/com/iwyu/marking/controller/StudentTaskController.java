@@ -2,15 +2,21 @@ package com.iwyu.marking.controller;
 
 
 import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
+import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.StudentTask;
+import com.iwyu.marking.service.StudentService;
 import com.iwyu.marking.service.StudentTaskService;
 import com.iwyu.marking.service.TaskService;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -49,6 +55,9 @@ public class StudentTaskController {
 
     @Resource
     private TaskService taskService;
+
+    @Resource
+    private StudentService studentService;
 
     @GetMapping("/checkMyTask")
     public List<StudentTaskDTO> studentTasks(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account) {
@@ -155,6 +164,23 @@ public class StudentTaskController {
         }
         //前端可以通过状态码，判断文件是否上传成功
         return false;
+    }
+
+
+    @RequestMapping("/export")
+    public void export(HttpServletResponse response, @RequestParam("taskId")Integer taskId){
+        QueryWrapper<StudentTask> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("task_id",taskId);
+        List<StudentTask> studentTaskList = studentTaskService.list(queryWrapper);
+        for (StudentTask studentTask :studentTaskList) {
+            QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
+            studentQueryWrapper.eq("account",studentTask.getAccount());
+            Student student = studentService.getOne(studentQueryWrapper);
+            studentTask.setClassName(student.getClassName());
+            studentTask.setStudentName(student.getStudentName());
+        }
+        //导出操作
+//        ExcelUtil.exportExcel(studentTaskList,"成绩单","课程成绩",StudentTask.class,"xxx.xls",response);
     }
 
 }

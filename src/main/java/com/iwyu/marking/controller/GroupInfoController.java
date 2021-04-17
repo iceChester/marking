@@ -7,7 +7,6 @@ import com.iwyu.marking.entity.GroupInfo;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.service.GroupInfoService;
-import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
