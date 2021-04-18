@@ -114,4 +114,9 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
         studentPage.setRecords(pageList);
         return studentPage;
     }
+
+    @Override
+    public List<String> getMemberAccount(Integer offerId) {
+        return timetableMapper.findMember(offerId);
+    }
 }

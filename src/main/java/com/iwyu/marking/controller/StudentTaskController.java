@@ -8,10 +8,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.StudentTask;
+import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.service.StudentService;
 import com.iwyu.marking.service.StudentTaskService;
 import com.iwyu.marking.service.TaskService;
 
+import com.iwyu.marking.service.TimetableService;
 import com.iwyu.marking.utils.FileUtil;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +62,9 @@ public class StudentTaskController {
 
     @Resource
     private StudentService studentService;
+
+    @Resource
+    private TimetableService timetableService;
 
     @GetMapping("/checkMyTask")
     public List<StudentTaskDTO> studentTasks(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account) {
@@ -184,5 +190,58 @@ public class StudentTaskController {
         FileUtil.exportExcel(studentTaskList,"成绩单","课程成绩",StudentTask.class,"xxx.xls",response);
     }
 
+    //'0~20', '20~40', '40~60', '60~80', '80~100',"未批改"
+    @GetMapping("/barData")
+    public List<Integer> barData(@RequestParam("taskId")Integer taskId){
+        Integer one = 0;
+        Integer two = 0;
+        Integer three = 0;
+        Integer four = 0;
+        Integer five = 0;
+        Integer six = 0;
+        QueryWrapper<StudentTask> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("task_id",taskId);
+        List<StudentTask> studentTaskList = studentTaskService.list(queryWrapper);
+        for (StudentTask studentTask :studentTaskList) {
+            if(studentTask.getScoreTotal()==null){
+                six++;
+            }
+            else if(studentTask.getScoreTotal()<20){
+                one++;
+            }else if(studentTask.getScoreTotal()<40){
+                two++;
+            }else if(studentTask.getScoreTotal()<60){
+                three++;
+            }else if(studentTask.getScoreTotal()<80){
+                four++;
+            }else if(studentTask.getScoreTotal()<=100){
+                five++;
+            }
+        }
+        List<Integer> data = new ArrayList<>();
+        data.add(one);
+        data.add(two);
+        data.add(three);
+        data.add(four);
+        data.add(five);
+        data.add(six);
+        return data;
+    }
+    @GetMapping("/pieData")
+    public List<Integer> pieData(@RequestParam("taskId")Integer taskId,@RequestParam("offerId")Integer offerId){
+        List<Integer> data = new ArrayList<>();
+        Integer accomplish = 0;
+        Integer unfinished = 0;
+        List<String> accountList = timetableService.getMemberAccount(offerId);
+        QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();
+        studentTaskQueryWrapper.in("account",accountList);
+        studentTaskQueryWrapper.eq("task_id",taskId);
+        List<StudentTask> studentTaskList = studentTaskService.list(studentTaskQueryWrapper);
+        accomplish = studentTaskList.size();
+        unfinished = accountList.size() - accomplish;
+        data.add(accomplish);
+        data.add(unfinished);
+        return data;
+    }
 }
 

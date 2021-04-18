@@ -22,4 +22,6 @@ public interface TimetableMapper extends BaseMapper<Timetable> {
 
     @Select("select s.student_id,s.student_name,s.class_name,s.account from student s where s.student_id in(select student_id from timetable where offer_id = #{offerId})")
     List<Student> studentInfo(Integer offerId);
+    @Select("SELECT account FROM `timetable` t where t.offer_id = #{offerId}")
+    List<String> findMember(Integer offerId);
 }
