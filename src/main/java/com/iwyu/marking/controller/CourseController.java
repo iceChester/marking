@@ -4,6 +4,7 @@ package com.iwyu.marking.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iwyu.marking.entity.Course;
+import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.service.CourseService;
 import com.iwyu.marking.service.TeacherService;
 import com.iwyu.marking.utils.FileUtil;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +49,23 @@ public class CourseController {
         return course;
     }
 
+    @DeleteMapping("/delete")
+    public boolean delete(@RequestParam("id") Integer id){
+        return courseService.removeById(id);
+    }
+
     @RequestMapping("/importExcel")
     public boolean importExcel(@RequestParam("file") MultipartFile file){
         List<Course> courseList = FileUtil.importExcel(file,1,1,Course.class);
         return courseService.saveBatch(courseList);
 
+    }
+
+    @RequestMapping("/export")
+    public void export(HttpServletResponse response){
+        List<Course> studentTaskList = courseService.list();
+        //导出操作
+        FileUtil.exportExcel(studentTaskList,"教师信息","详细",Course.class,"教师信息.xls",response);
     }
 }
 

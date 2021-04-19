@@ -47,6 +47,8 @@ public class ShiroConfig {
 
         Map<String, String> filterMap = new LinkedHashMap<>();
         //主要是这部分： 不要用这种方法，最好用注解的方法
+        filterMap.put("/static/data/**", "anon");
+        filterMap.put("/data/**", "anon");
         filterMap.put("/userLogin", "anon");
 //        filterMap.put("/list", "roles[admin,user]");
 //        filterMap.put("/delete", "perms[admin:delete]");
