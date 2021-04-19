@@ -20,4 +20,6 @@ public interface OfferCoursesService extends IService<OfferCourses> {
     boolean saveOffer(OfferCourseDTO dto);
     //查询课程的所有老师
     List<Teacher> findTeacher(Integer offerId);
+    //查询课程信息
+    OfferCourses findCourse(Integer offerId);
 }

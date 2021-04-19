@@ -2,13 +2,11 @@ package com.iwyu.marking.controller;
 
 
 import cn.hutool.core.io.FileTypeUtil;
-import cn.hutool.poi.excel.ExcelUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.StudentTask;
-import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.service.StudentService;
 import com.iwyu.marking.service.StudentTaskService;
 import com.iwyu.marking.service.TaskService;

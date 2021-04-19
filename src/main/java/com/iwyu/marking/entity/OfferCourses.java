@@ -1,6 +1,7 @@
 package com.iwyu.marking.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -46,5 +47,20 @@ public class OfferCourses implements Serializable {
 
       @ApiModelProperty(value = "课程名称")
       private String courseName;
+
+      @TableField(exist = false)
+      private Integer groupNumber;
+
+      @TableField(exist = false)
+      private Integer memberCount;
+
+  @TableField(exist = false)
+      private String mainTeacherName;
+
+  @TableField(exist = false)
+      private String assistantOneName;
+
+  @TableField(exist = false)
+      private String assistantTwoName;
 
 }

@@ -65,7 +65,7 @@ public class CourseController {
     public void export(HttpServletResponse response){
         List<Course> studentTaskList = courseService.list();
         //导出操作
-        FileUtil.exportExcel(studentTaskList,"教师信息","详细",Course.class,"教师信息.xls",response);
+        FileUtil.exportExcel(studentTaskList,"课程信息","详细",Course.class,"课程信息.xls",response);
     }
 }
 

@@ -2,19 +2,18 @@ package com.iwyu.marking.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iwyu.marking.dto.OfferCourseDTO;
-import com.iwyu.marking.entity.OfferCourses;
-import com.iwyu.marking.entity.Student;
-import com.iwyu.marking.entity.Teacher;
-import com.iwyu.marking.entity.Timetable;
+import com.iwyu.marking.entity.*;
 import com.iwyu.marking.mapper.CourseMapper;
 import com.iwyu.marking.mapper.OfferCoursesMapper;
 import com.iwyu.marking.mapper.StudentMapper;
 import com.iwyu.marking.mapper.TimetableMapper;
+import com.iwyu.marking.service.GroupsService;
 import com.iwyu.marking.service.OfferCoursesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.iwyu.marking.service.TeacherService;
 import com.iwyu.marking.service.TimetableService;
 
+import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,13 @@ public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, Off
     private TimetableService timetableService;
 
     @Resource
+    private TimetableMapper timetableMapper;
+
+    @Resource
     private TeacherService teacherService;
+
+    @Resource
+    private GroupsService groupsService;
 
     //后期把事务加上,保存开课信息和添加学生要同步
     @Override
@@ -90,5 +95,31 @@ public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, Off
             teacherList.add(assistantTwo);
         }
         return teacherList;
+    }
+
+    @Override
+    public OfferCourses findCourse(Integer offerId) {
+        OfferCourses offerCourses = offerMapper.selectById(offerId);
+        if(offerCourses!=null){
+            offerCourses.setMemberCount(timetableMapper.countMember(offerId));
+            QueryWrapper<Groups> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("offer_id",offerId);
+            offerCourses.setGroupNumber(groupsService.count(queryWrapper));
+            QueryWrapper<Teacher> teacherQueryWrapper1 = new QueryWrapper<>();
+            teacherQueryWrapper1.eq("account",offerCourses.getMainTeacher());
+            offerCourses.setMainTeacherName(teacherService.getOne(teacherQueryWrapper1).getTeacherName());
+            if(offerCourses.getAssistantTeacherOne()!=null&&offerCourses.getAssistantTeacherOne().length()>0){
+                QueryWrapper<Teacher> teacherQueryWrapper2 = new QueryWrapper<>();
+                teacherQueryWrapper2.eq("account",offerCourses.getAssistantTeacherOne());
+                offerCourses.setAssistantOneName(teacherService.getOne(teacherQueryWrapper2).getTeacherName());
+            }
+            if(offerCourses.getAssistantTeacherTwo()!=null&&offerCourses.getAssistantTeacherTwo().length()>0){
+                QueryWrapper<Teacher> teacherQueryWrapper3 = new QueryWrapper<>();
+                teacherQueryWrapper3.eq("account",offerCourses.getAssistantTeacherTwo());
+                offerCourses.setAssistantTwoName(teacherService.getOne(teacherQueryWrapper3).getTeacherName());
+            }
+            return offerCourses;
+        }
+        return null;
     }
 }

@@ -53,14 +53,17 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
             QueryWrapper<Teacher> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("account",courses.getMainTeacher());
             teacherCourseDTO.setMainTeacherName(teacherMapper.selectOne(queryWrapper).getTeacherName());
-            if(courses.getAssistantTeacherOne()!=null){
+            if(courses.getAssistantTeacherOne()!=null&&courses.getAssistantTeacherOne().length()>0){
                 QueryWrapper<Teacher> queryWrapperOne = new QueryWrapper<>();
                 queryWrapperOne.eq("account",courses.getAssistantTeacherOne());
                 teacherCourseDTO.setAssistantOneName(teacherMapper.selectOne(queryWrapperOne).getTeacherName());
             }
-            if(courses.getAssistantTeacherTwo()!=null){
+            System.out.println(courses.getAssistantTeacherTwo());
+            if(courses.getAssistantTeacherTwo()!=null&&courses.getAssistantTeacherTwo().length()>0){
+                System.out.println(courses.getAssistantTeacherTwo());
                 QueryWrapper<Teacher> queryWrapperTwo = new QueryWrapper<>();
                 queryWrapperTwo.eq("account",courses.getAssistantTeacherTwo());
+
                 teacherCourseDTO.setAssistantTwoName(teacherMapper.selectOne(queryWrapperTwo).getTeacherName());
             }
             teacherCourseDTO.setMemberCount(timetableMapper.countMember(courses.getOfferId()));

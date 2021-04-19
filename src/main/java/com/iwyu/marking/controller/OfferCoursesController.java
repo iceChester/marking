@@ -55,5 +55,9 @@ public class OfferCoursesController {
     public List<Teacher> findTeacher(@RequestParam("offerId") Integer offerId){
         return offerCoursesService.findTeacher(offerId);
     }
+    @GetMapping("/findCourse")
+    public OfferCourses findCourse(@RequestParam("offerId") Integer offerId){
+        return offerCoursesService.findCourse(offerId);
+    }
 }
 

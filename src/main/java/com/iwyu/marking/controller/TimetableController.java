@@ -1,9 +1,11 @@
 package com.iwyu.marking.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.TeacherCourseDTO;
 import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.Timetable;
 import com.iwyu.marking.mapper.TimetableMapper;
 import com.iwyu.marking.service.TimetableService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -46,6 +48,13 @@ public class TimetableController {
     @RequiresPermissions("student")
     public List<TeacherCourseDTO> studentCourse(@RequestParam(value = "account") String account){
         return timetableService.findStudentCourse(account);
+    }
+    @DeleteMapping("/delete")
+    public boolean delete(@RequestParam("offerId") Integer offerId,@RequestParam("account") String account){
+        QueryWrapper<Timetable> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("account",account);
+        queryWrapper.eq("offer_id",offerId);
+        return timetableService.remove(queryWrapper);
     }
 }
 

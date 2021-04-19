@@ -26,13 +26,10 @@ public class OfferCourseDTO implements Serializable {
     private String courseName;
     private Integer deleted;
 
-    @ApiModelProperty(value = "主要授课教师")
     private String mainTeacher;
 
-    @ApiModelProperty(value = "助教1")
     private String assistantTeacherOne;
 
-    @ApiModelProperty(value = "助教2")
     private String assistantTeacherTwo;
 
     @ApiModelProperty(value = "班级，用逗号隔开")
