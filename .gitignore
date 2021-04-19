@@ -48,3 +48,5 @@ $RECYCLE.BIN/
 # Node.js
 node_modules/
 >>>>>>> 044bc89b6112b64b2dda254fcdd1b5d76416c348
+/src/main/resources/static/studentTask
+/src/main/resources/static/studentTask/

@@ -5,11 +5,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iwyu.marking.entity.Course;
 import com.iwyu.marking.service.CourseService;
+import com.iwyu.marking.service.TeacherService;
+import com.iwyu.marking.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +30,7 @@ import java.util.List;
 @RequestMapping("/course")
 public class CourseController {
 
-    @Autowired
+    @Resource
     private CourseService courseService;
 
     @GetMapping("/findAll")
@@ -40,6 +45,13 @@ public class CourseController {
     public Course findById(@RequestParam("courseId") Integer id){
         Course course = courseService.getById(id);
         return course;
+    }
+
+    @RequestMapping("/importExcel")
+    public boolean importExcel(@RequestParam("file") MultipartFile file){
+        List<Course> courseList = FileUtil.importExcel(file,1,1,Course.class);
+        return courseService.saveBatch(courseList);
+
     }
 }
 

@@ -1,5 +1,6 @@
 package com.iwyu.marking.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
@@ -28,9 +29,11 @@ public class Course implements Serializable {
 
       @ApiModelProperty(value = "课程id")
         @TableId(value = "course_id", type = IdType.AUTO)
+      @Excel(name = "课程编号",orderNum = "0")
       private Integer courseId;
 
       @ApiModelProperty(value = "课程名称")
+      @Excel(name = "课程名称",orderNum = "0")
       private String courseName;
 
       @ApiModelProperty(value = "假删除标识")

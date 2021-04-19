@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,6 @@ public class StudentController {
     @RequestMapping("/importExcel")
     public boolean importExcel(@RequestParam("file") MultipartFile file){
         //解析excel，
-        System.out.println("111111111111111");
         List<Student> studentList = FileUtil.importExcel(file,1,1,Student.class);
         //也可以使用MultipartFile,使用 FileUtil.importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass)导入
         System.out.println("导入数据一共【"+studentList.size()+"】行");
@@ -62,7 +62,13 @@ public class StudentController {
             user.setRole("student");
             userList.add(user);
         }
-        return studentService.saveBatch(studentList)&&userService.saveBatch(userList);
+        try {
+            userService.saveBatch(userList);
+        }catch (Exception e){
+            return false;
+        }
+
+        return studentService.saveBatch(studentList);
     }
 }
 

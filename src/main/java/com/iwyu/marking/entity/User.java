@@ -3,10 +3,7 @@ package com.iwyu.marking.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import com.iwyu.marking.myenum.RoleEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,7 +27,7 @@ public class User implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    @TableId
+  @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
       @ApiModelProperty(value = "账号")
         private String account;

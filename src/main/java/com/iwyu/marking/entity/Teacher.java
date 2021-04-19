@@ -2,6 +2,7 @@ package com.iwyu.marking.entity;
 
 import java.io.Serializable;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
@@ -31,9 +32,11 @@ public class Teacher implements Serializable {
         private Integer teacherId;
 
       @ApiModelProperty(value = "教师名")
+      @Excel(name = "教师名",orderNum = "0")
       private String teacherName;
 
       @ApiModelProperty(value = "账户")
+      @Excel(name = "账号",orderNum = "0")
       private String account;
 
 
