@@ -75,5 +75,8 @@ public class StudentTask implements Serializable {
       @Excel(name = "班级", orderNum = "0")
       private String className;
 
+      @TableField(exist = false)
+      private String score;
+
 
 }

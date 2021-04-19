@@ -62,7 +62,8 @@ public class TaskController {
         }else{
            String[] taskAccount =  task.getMarkingAccount().split(",");
             for (int i=0;i<taskAccount.length;i++) {
-                if(taskAccount[i]==account){
+                if(taskAccount[i].equals(account)){
+                    System.out.println(i);
                     markingDTO.setPosition(i+1);
                     markingDTO.setWeight(weight);
                     return markingDTO;

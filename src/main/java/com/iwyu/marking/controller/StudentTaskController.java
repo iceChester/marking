@@ -71,6 +71,11 @@ public class StudentTaskController {
         return studentTaskService.studentTasks(offerId, account);
     }
 
+    @PostMapping("/saveScore")
+    public boolean saveScore(@RequestBody StudentTask studentTask){
+        return studentTaskService.saveOrUpdate(studentTask);
+    }
+
     @GetMapping("/courseTaskList")
     public IPage<StudentTask> courseTaskList(@RequestParam(value = "page") Long page, @RequestParam(value = "size") Long size, @RequestParam("taskId") Integer taskId){
         return studentTaskService.studentTaskList(page,size,taskId);

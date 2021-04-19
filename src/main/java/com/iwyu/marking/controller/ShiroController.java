@@ -85,12 +85,15 @@ public class ShiroController {
                 Teacher teacher = teacherService.getOne(teacherQueryWrapper);
                 roleId = teacher.getTeacherId();
                 userName = teacher.getTeacherName();
-            }else {
+            }else if(user.getRole().equals("student")){
                 QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
                 studentQueryWrapper.eq("account",user.getAccount());
                 Student student = studentService.getOne(studentQueryWrapper);
                 roleId = student.getStudentId();
                 userName = student.getStudentName();
+            }else {
+                roleId = user.getId();
+                userName = user.getAccount();
             }
             result.put("roleId",roleId);
             result.put("userName",userName);

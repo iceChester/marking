@@ -1,13 +1,22 @@
 package com.iwyu.marking.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iwyu.marking.dto.ClassesDTO;
+import com.iwyu.marking.entity.Student;
+import com.iwyu.marking.entity.User;
 import com.iwyu.marking.service.StudentService;
+import com.iwyu.marking.service.UserService;
+import com.iwyu.marking.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,12 +31,38 @@ import java.util.List;
 @RequestMapping("/student")
 public class StudentController {
 
-    @Autowired
+    @Resource
     private StudentService studentService;
+
+    @Resource
+    private UserService userService;
 
     @GetMapping("/findClassName")
     public List<ClassesDTO> findClassName(@RequestParam("name") String name){
         return studentService.findClassName(name);
+    }
+    @GetMapping("/findAll")
+    public IPage<Student> findAll(@RequestParam(value = "page") Long page, @RequestParam(value = "size") Long size){
+        Page<Student> studentPage = new Page<>(page,size);
+        return studentService.page(studentPage);
+    }
+    @RequestMapping("/importExcel")
+    public boolean importExcel(@RequestParam("file") MultipartFile file){
+        //解析excel，
+        System.out.println("111111111111111");
+        List<Student> studentList = FileUtil.importExcel(file,1,1,Student.class);
+        //也可以使用MultipartFile,使用 FileUtil.importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass)导入
+        System.out.println("导入数据一共【"+studentList.size()+"】行");
+        List<User> userList = new ArrayList<>();
+        for (Student student :studentList) {
+            User user = new User();
+            user.setAccount(student.getAccount());
+            user.setAuthority("1");
+            user.setPassword("123");
+            user.setRole("student");
+            userList.add(user);
+        }
+        return studentService.saveBatch(studentList)&&userService.saveBatch(userList);
     }
 }
 
