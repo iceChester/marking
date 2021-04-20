@@ -1,5 +1,7 @@
 package com.iwyu.marking.service.impl;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
@@ -15,6 +17,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,5 +82,25 @@ public class StudentTaskServiceImpl extends ServiceImpl<StudentTaskMapper, Stude
             studentTask.setClassName(student.getClassName());
         }
         return studentTaskPage;
+    }
+
+    @Override
+    public File compressAllTaskFile(Integer taskId) throws Exception {
+        String rootPath = "D:/TEST/vue/marking/public/studentTask/";
+        Task task = taskService.getById(taskId);
+        Integer offerId = task.getOfferId();
+        String zipPath = rootPath + offerId.toString() + "/个人作业/"+taskId.toString();
+        rootPath = rootPath + offerId.toString() + "/个人作业/压缩作业/" + taskId.toString()+"/ALL/";
+        String zipName = "/" + task.getTitle() + ".zip";
+        File fileDir = new File(rootPath);
+        if (!fileDir.exists() && !fileDir.isDirectory()) {
+            fileDir.mkdirs();
+            //将aaa目录以及其目录下的所有文件目录打包到d:/bbb/目录下的ccc.zip文件中
+//            ZipUtil.zip("d:/aaa", "d:/bbb/ccc.zip", true);
+            File file = ZipUtil.zip(zipPath, rootPath+zipName, true);
+            return file;
+        }else {
+            return FileUtil.file(rootPath+zipName);
+        }
     }
 }

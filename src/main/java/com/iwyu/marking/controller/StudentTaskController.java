@@ -2,6 +2,7 @@ package com.iwyu.marking.controller;
 
 
 import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
@@ -20,6 +21,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +44,7 @@ public class StudentTaskController {
     private static final String FILE_XLS=".xls";
     private static final String FILE_XLSX=".xlsx";
     private static final String FILE_JPG=".jpg";
+    private static final String FILE_JPEG=".jpeg";
     private static final String FILE_PNG=".png";
     private static final String FILE_BMP=".bmp";
     private static final String FILE_MP4=".mp4";
@@ -80,7 +85,10 @@ public class StudentTaskController {
     }
 
     @PostMapping("/uploadTask")
-    public boolean uploadFile(@RequestParam("file") MultipartFile[] file, @RequestParam("taskId") Integer taskId,@RequestParam("account") String account) {
+    public boolean uploadFile(@RequestParam("file") MultipartFile[] file, @RequestParam("studentTask") String json) {
+        StudentTask idAndAccount = JSONUtil.toBean(json,StudentTask.class);
+        Integer taskId = idAndAccount.getTaskId();
+        String account = idAndAccount.getAccount();
         //添加工具类没有定义的文件类型
         FileTypeUtil.putFileType("D0CF11E0", "doc");
         String rootPath = "D:/TEST/vue/marking/public/studentTask/";
@@ -117,7 +125,8 @@ public class StudentTaskController {
                                 FILE_MP3.equalsIgnoreCase(fileType)||FILE_PDF.equalsIgnoreCase(fileType)||
                                 FILE_PPT.equalsIgnoreCase(fileType)||FILE_PPTX.equalsIgnoreCase(fileType)||
                                 FILE_DOC.equalsIgnoreCase(fileType)||FILE_DOCX.equalsIgnoreCase(fileType)||
-                                FILE_ZIP.equalsIgnoreCase(fileType)||FILE_RAR.equalsIgnoreCase(fileType)) {
+                                FILE_ZIP.equalsIgnoreCase(fileType)||FILE_RAR.equalsIgnoreCase(fileType)||
+                                FILE_JPEG.equalsIgnoreCase(fileType)) {
                             //         获取源文件前缀
                             String fileNamePrefix = originalFilename.substring(0,originalFilename.lastIndexOf("."));
                             //获取源文件后缀
@@ -245,6 +254,28 @@ public class StudentTaskController {
         data.add(accomplish);
         data.add(unfinished);
         return data;
+    }
+
+    @GetMapping("/downloadAllTask")
+    public void downloadAllTask(HttpServletResponse response, @RequestParam("taskId")Integer taskId){
+        try {
+            OutputStream out = response.getOutputStream();
+            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(studentTaskService.compressAllTaskFile(taskId));
+            response.setContentType("APPLICATION/OCTET-STREAM");
+            response.setHeader("Content-Disposition","attachment; filename=task.zip");
+            // 循环取出流中的数据
+            byte[] b = new byte[100];
+            int len;
+            while ((len = inputStream.read(b)) !=-1) {
+                out.write(b, 0, len);
+            }
+            inputStream.close();
+            out.close();
+        } catch (IOException e) {
+//            throw new NormalException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -33,7 +33,7 @@ public class GroupsController {
         if(groupsService.save(group)){
             return group.getGroupId();
         }
-        return  null;
+        return  0;
     }
     @RequestMapping("/checkLeader")
     public boolean checkLeader(@RequestParam("offerId") Integer offerId,@RequestParam("account") String account){

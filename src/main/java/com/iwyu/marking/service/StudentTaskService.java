@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.StudentTask;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -24,4 +27,8 @@ public interface StudentTaskService extends IService<StudentTask> {
 
     //教师获取某一门课程的学生作业
     IPage<StudentTask> studentTaskList(Long page, Long size, Integer taskId);
+
+    //压缩作业文件
+
+    File compressAllTaskFile(Integer taskId) throws Exception;
 }
