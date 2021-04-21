@@ -28,7 +28,8 @@ public interface StudentTaskService extends IService<StudentTask> {
     //教师获取某一门课程的学生作业
     IPage<StudentTask> studentTaskList(Long page, Long size, Integer taskId);
 
-    //压缩作业文件
-
+    //压缩全部作业文件并获取作业压缩文件
     File compressAllTaskFile(Integer taskId) throws Exception;
+    //压缩个人作业并获取
+    File compressOneTaskFile(Integer taskId,String account) throws Exception;
 }

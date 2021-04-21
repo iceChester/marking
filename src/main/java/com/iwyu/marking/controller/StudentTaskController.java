@@ -277,6 +277,26 @@ public class StudentTaskController {
             e.printStackTrace();
         }
     }
-
+    @GetMapping("/downloadOneTask")
+    public void downloadOneTask(HttpServletResponse response, @RequestParam("taskId")Integer taskId,@RequestParam("account") String account){
+        try {
+            OutputStream out = response.getOutputStream();
+            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(studentTaskService.compressOneTaskFile(taskId,account));
+            response.setContentType("APPLICATION/OCTET-STREAM");
+            response.setHeader("Content-Disposition","attachment; filename=task.zip");
+            // 循环取出流中的数据
+            byte[] b = new byte[100];
+            int len;
+            while ((len = inputStream.read(b)) !=-1) {
+                out.write(b, 0, len);
+            }
+            inputStream.close();
+            out.close();
+        } catch (IOException e) {
+//            throw new NormalException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 

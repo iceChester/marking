@@ -47,6 +47,15 @@ public class TaskController {
         return taskService.findByOfferId(offerId);
     }
 
+    @GetMapping("/findCollectingTask")
+    public List<Task> findCollectingTask(@RequestParam("offerId") int offerId){
+        return taskService.findCollectingTask(offerId);
+    }
+    @GetMapping("/findDeadlineTask")
+    public List<Task> findDeadlineTask(@RequestParam("offerId") int offerId){
+        return taskService.findDeadlineTask(offerId);
+    }
+
     @GetMapping("/checkMarking")
     public MarkingDTO checkMarking(@RequestParam("taskId")Integer taskId, @RequestParam("account") String account){
         Task task = taskService.getById(taskId);

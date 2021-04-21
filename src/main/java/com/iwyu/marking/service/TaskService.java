@@ -17,4 +17,8 @@ public interface TaskService extends IService<Task> {
 
     //查找某课程的所有作业
     List<Task> findByOfferId(int offerId);
+
+    //查询某一门课程正在收集的作业
+    List<Task> findCollectingTask(int offerId);
+    List<Task> findDeadlineTask(int offerId);
 }

@@ -89,9 +89,9 @@ public class StudentTaskServiceImpl extends ServiceImpl<StudentTaskMapper, Stude
         String rootPath = "D:/TEST/vue/marking/public/studentTask/";
         Task task = taskService.getById(taskId);
         Integer offerId = task.getOfferId();
+        String zipName = task.getTitle() + ".zip";
         String zipPath = rootPath + offerId.toString() + "/个人作业/"+taskId.toString();
         rootPath = rootPath + offerId.toString() + "/个人作业/压缩作业/" + taskId.toString()+"/ALL/";
-        String zipName = "/" + task.getTitle() + ".zip";
         File fileDir = new File(rootPath);
         if (!fileDir.exists() && !fileDir.isDirectory()) {
             fileDir.mkdirs();
@@ -100,6 +100,33 @@ public class StudentTaskServiceImpl extends ServiceImpl<StudentTaskMapper, Stude
             File file = ZipUtil.zip(zipPath, rootPath+zipName, true);
             return file;
         }else {
+            return FileUtil.file(rootPath+zipName);
+        }
+    }
+
+    @Override
+    public File compressOneTaskFile(Integer taskId, String account) throws Exception {
+        String rootPath = "D:/TEST/vue/marking/public/studentTask/";
+        Task task = taskService.getById(taskId);
+        Integer offerId = task.getOfferId();
+        String zipName = account + ".zip";
+        //源路径
+        String zipPath = rootPath + offerId.toString() + "/个人作业/"+taskId.toString()+"/"+account;
+        //压缩目的地
+        rootPath = rootPath + offerId.toString() + "/个人作业/压缩作业/" + taskId.toString()+"/Single/";
+        File fileDir = new File(rootPath);
+        File fileExist = new File(rootPath+zipName);
+        if (!fileDir.exists() && !fileDir.isDirectory()) {
+            System.out.println("11111111");
+            fileDir.mkdirs();
+            //将aaa目录以及其目录下的所有文件目录打包到d:/bbb/目录下的ccc.zip文件中
+//            ZipUtil.zip("d:/aaa", "d:/bbb/ccc.zip", true);
+            File file = ZipUtil.zip(zipPath, rootPath+zipName, true);
+            return file;
+        }else if(!fileExist.exists()){
+            File file = ZipUtil.zip(zipPath, rootPath+zipName, true);
+            return file;
+        }else{
             return FileUtil.file(rootPath+zipName);
         }
     }
