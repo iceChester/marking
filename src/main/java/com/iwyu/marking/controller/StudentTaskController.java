@@ -15,6 +15,7 @@ import com.iwyu.marking.service.TaskService;
 
 import com.iwyu.marking.service.TimetableService;
 import com.iwyu.marking.utils.FileUtil;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.nio.file.FileSystem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,6 +86,18 @@ public class StudentTaskController {
     @GetMapping("/courseTaskList")
     public IPage<StudentTask> courseTaskList(@RequestParam(value = "page") Long page, @RequestParam(value = "size") Long size, @RequestParam("taskId") Integer taskId){
         return studentTaskService.studentTaskList(page,size,taskId);
+    }
+
+    @DeleteMapping("/deleteStudentTask")
+    public boolean deleteStudentTask(@RequestParam("taskId") Integer taskId, @RequestParam("account") String account){
+        String rootPath = "D:/TEST/vue/marking/public/studentTask/";
+        Integer offerId = taskService.getById(taskId).getOfferId();
+        rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
+        QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();
+        studentTaskQueryWrapper.eq("task_id",taskId);
+        studentTaskQueryWrapper.eq("account",account);
+        studentTaskService.remove(studentTaskQueryWrapper);
+        return FileSystemUtils.deleteRecursively(new File(rootPath));
     }
 
     @PostMapping("/uploadTask")
