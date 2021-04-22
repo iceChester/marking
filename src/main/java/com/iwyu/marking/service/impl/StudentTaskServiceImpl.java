@@ -45,7 +45,7 @@ public class StudentTaskServiceImpl extends ServiceImpl<StudentTaskMapper, Stude
     @Override
     public List<StudentTaskDTO> studentTasks(Integer offerId, String account) {
         List<StudentTaskDTO> studentTaskDTOList = new ArrayList<>();
-        List<Task> taskList = taskService.findByOfferId(offerId);
+        List<Task> taskList = taskService.findDeadlineTask(offerId);
         if(taskList!=null){
             for (Task task :taskList) {
                 QueryWrapper<StudentTask> query = new QueryWrapper<>();

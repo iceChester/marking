@@ -56,6 +56,19 @@ public class TaskController {
         return taskService.findDeadlineTask(offerId);
     }
 
+    @GetMapping("/studentCollectingTask")
+    public List<Task> studentCollectingTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account){
+        return taskService.studentCollectingTask(offerId,account);
+    }
+    @GetMapping("/studentAccomplishTask")
+    public List<Task> studentAccomplishTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account){
+        return taskService.studentAccomplishTask(offerId,account);
+    }
+    @GetMapping("/studentOverdueTask")
+    public List<Task> studentOverdueTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account){
+        return taskService.studentOverdueTask(offerId,account);
+    }
+
     @GetMapping("/checkMarking")
     public MarkingDTO checkMarking(@RequestParam("taskId")Integer taskId, @RequestParam("account") String account){
         Task task = taskService.getById(taskId);
