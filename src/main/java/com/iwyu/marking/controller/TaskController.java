@@ -48,25 +48,25 @@ public class TaskController {
     }
 
     @GetMapping("/findCollectingTask")
-    public List<Task> findCollectingTask(@RequestParam("offerId") int offerId){
-        return taskService.findCollectingTask(offerId);
+    public List<Task> findCollectingTask(@RequestParam("offerId") int offerId,@RequestParam("taskType") Integer taskType){
+        return taskService.findCollectingTask(offerId,taskType);
     }
     @GetMapping("/findDeadlineTask")
-    public List<Task> findDeadlineTask(@RequestParam("offerId") int offerId){
-        return taskService.findDeadlineTask(offerId);
+    public List<Task> findDeadlineTask(@RequestParam("offerId") int offerId,@RequestParam("taskType") Integer taskType){
+        return taskService.findDeadlineTask(offerId,taskType);
     }
 
     @GetMapping("/studentCollectingTask")
-    public List<Task> studentCollectingTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account){
-        return taskService.studentCollectingTask(offerId,account);
+    public List<Task> studentCollectingTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
+        return taskService.studentCollectingTask(offerId,account,taskType);
     }
     @GetMapping("/studentAccomplishTask")
-    public List<Task> studentAccomplishTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account){
-        return taskService.studentAccomplishTask(offerId,account);
+    public List<Task> studentAccomplishTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
+        return taskService.studentAccomplishTask(offerId,account,taskType);
     }
     @GetMapping("/studentOverdueTask")
-    public List<Task> studentOverdueTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account){
-        return taskService.studentOverdueTask(offerId,account);
+    public List<Task> studentOverdueTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
+        return taskService.studentOverdueTask(offerId,account,taskType);
     }
 
     @GetMapping("/checkMarking")

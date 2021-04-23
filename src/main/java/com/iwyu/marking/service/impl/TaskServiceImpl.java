@@ -39,28 +39,30 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public List<Task> findCollectingTask(int offerId) {
+    public List<Task> findCollectingTask(int offerId,int taskType) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         QueryWrapper<Task> taskQueryWrapper = new QueryWrapper<>();
         taskQueryWrapper.ge("deadline",sdf.format(date));
+        taskQueryWrapper.eq("task_type",taskType);
         taskQueryWrapper.eq("offer_id",offerId);
         return taskMapper.selectList(taskQueryWrapper);
     }
 
     @Override
-    public List<Task> findDeadlineTask(int offerId) {
+    public List<Task> findDeadlineTask(int offerId,int taskType) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         QueryWrapper<Task> taskQueryWrapper = new QueryWrapper<>();
+        taskQueryWrapper.eq("task_type",taskType);
         taskQueryWrapper.lt("deadline",sdf.format(date));
         taskQueryWrapper.eq("offer_id",offerId);
         return taskMapper.selectList(taskQueryWrapper);
     }
 
     @Override
-    public List<Task> studentCollectingTask(int offerId, String account) {
-        List<Task> taskList = this.findCollectingTask(offerId);
+    public List<Task> studentCollectingTask(int offerId, String account,int taskType) {
+        List<Task> taskList = this.findCollectingTask(offerId,taskType);
         List<Task> collectingTaskList = new ArrayList<>();
         for (Task task :taskList) {
             QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();
@@ -75,8 +77,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public List<Task> studentAccomplishTask(int offerId, String account) {
-        List<Task> taskList = this.findCollectingTask(offerId);
+    public List<Task> studentAccomplishTask(int offerId, String account,int taskType) {
+        List<Task> taskList = this.findCollectingTask(offerId,taskType);
         List<Task> accomplishTaskList = new ArrayList<>();
         for (Task task :taskList) {
             QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();
@@ -91,8 +93,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     }
 
     @Override
-    public List<Task> studentOverdueTask(int offerId, String account) {
-        List<Task> taskList = this.findDeadlineTask(offerId);
+    public List<Task> studentOverdueTask(int offerId, String account,int taskType) {
+        List<Task> taskList = this.findDeadlineTask(offerId,taskType);
         List<Task> overdueTaskList = new ArrayList<>();
         for (Task task :taskList) {
             QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();

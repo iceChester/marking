@@ -21,7 +21,7 @@ import java.util.List;
 public interface StudentTaskService extends IService<StudentTask> {
 
     //学生获取作业列表
-    List<StudentTaskDTO> studentTasks(Integer offerId,String account);
+    List<StudentTaskDTO> studentTasks(Integer offerId,String account,int taskType);
 
     StudentTask getTask(Integer taskId,String account);
 

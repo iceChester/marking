@@ -73,8 +73,8 @@ public class StudentTaskController {
     private TimetableService timetableService;
 
     @GetMapping("/checkMyTask")
-    public List<StudentTaskDTO> studentTasks(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account) {
-        return studentTaskService.studentTasks(offerId, account);
+    public List<StudentTaskDTO> studentTasks(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType) {
+        return studentTaskService.studentTasks(offerId, account,taskType);
     }
 
 
