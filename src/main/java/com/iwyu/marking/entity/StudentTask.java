@@ -78,5 +78,7 @@ public class StudentTask implements Serializable {
       @TableField(exist = false)
       private String score;
 
+      @TableField(exist = false)
+      private Integer groupId;
 
 }

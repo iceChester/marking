@@ -6,14 +6,12 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.iwyu.marking.dto.StudentTaskDTO;
+import com.iwyu.marking.entity.GroupInfo;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.entity.StudentTask;
 import com.iwyu.marking.entity.Task;
-import com.iwyu.marking.service.StudentService;
-import com.iwyu.marking.service.StudentTaskService;
-import com.iwyu.marking.service.TaskService;
+import com.iwyu.marking.service.*;
 
-import com.iwyu.marking.service.TimetableService;
 import com.iwyu.marking.utils.FileUtil;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +70,9 @@ public class StudentTaskController {
     @Resource
     private TimetableService timetableService;
 
+    @Resource
+    private GroupInfoService groupInfoService;
+
     @GetMapping("/checkMyTask")
     public List<StudentTaskDTO> studentTasks(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType) {
         return studentTaskService.studentTasks(offerId, account,taskType);
@@ -89,27 +90,48 @@ public class StudentTaskController {
     }
 
     @DeleteMapping("/deleteStudentTask")
-    public boolean deleteStudentTask(@RequestParam("taskId") Integer taskId, @RequestParam("account") String account){
+    public boolean deleteStudentTask(@RequestParam("taskId") Integer taskId, @RequestParam("account") String account,@RequestParam("groupId") Integer groupId){
         String rootPath = "D:/TEST/vue/marking/public/studentTask/";
         Integer offerId = taskService.getById(taskId).getOfferId();
-        rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
         QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();
-        studentTaskQueryWrapper.eq("task_id",taskId);
-        studentTaskQueryWrapper.eq("account",account);
-        studentTaskService.remove(studentTaskQueryWrapper);
+        if(groupId!=-1){
+            rootPath = rootPath + offerId.toString() + "/" + "小组作业" + "/" + taskId.toString()+ "/" + groupId.toString() + "/";
+            studentTaskQueryWrapper.eq("task_id",taskId);
+            QueryWrapper<GroupInfo> groupInfoQueryWrapper = new QueryWrapper<>();
+            groupInfoQueryWrapper.eq("group_id",groupId);
+            List<GroupInfo> groupInfoList = groupInfoService.list(groupInfoQueryWrapper);
+            List<String> accountList = new ArrayList<>();
+            for (GroupInfo groupInfo :groupInfoList) {
+                accountList.add(groupInfo.getMemberAccount());
+            }
+            studentTaskQueryWrapper.in("account",accountList);
+            studentTaskService.remove(studentTaskQueryWrapper);
+        }else {
+            rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
+            studentTaskQueryWrapper.eq("task_id",taskId);
+            studentTaskQueryWrapper.eq("account",account);
+            studentTaskService.remove(studentTaskQueryWrapper);
+        }
+
+
         return FileSystemUtils.deleteRecursively(new File(rootPath));
     }
 
     @PostMapping("/uploadTask")
     public boolean uploadFile(@RequestParam("file") MultipartFile[] file, @RequestParam("studentTask") String json) {
-        StudentTask idAndAccount = JSONUtil.toBean(json,StudentTask.class);
-        Integer taskId = idAndAccount.getTaskId();
-        String account = idAndAccount.getAccount();
+        StudentTask idAndAccountAndGroupId = JSONUtil.toBean(json,StudentTask.class);
+        Integer taskId = idAndAccountAndGroupId.getTaskId();
+        Integer groupId = idAndAccountAndGroupId.getGroupId();
+        String account = idAndAccountAndGroupId.getAccount();
         //添加工具类没有定义的文件类型
         FileTypeUtil.putFileType("D0CF11E0", "doc");
         String rootPath = "D:/TEST/vue/marking/public/studentTask/";
         Integer offerId = taskService.getById(taskId).getOfferId();
-        rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
+        if(groupId!=-1){
+            rootPath = rootPath + offerId.toString() + "/" + "小组作业" + "/" + taskId.toString()+ "/" + groupId.toString() + "/";
+        }else{
+            rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
+        }
         File fileDir = new File(rootPath);
         if (!fileDir.exists() && !fileDir.isDirectory()) {
             fileDir.mkdirs();
@@ -192,6 +214,25 @@ public class StudentTaskController {
                 studentTask.setVideoFile(videoFileName);
                 studentTask.setSubmitDate(new Date().toString());
                 studentTaskService.saveOrUpdate(studentTask);
+                if(groupId!=-1){
+                    QueryWrapper<GroupInfo> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("group_id",groupId);
+                    List<GroupInfo> groupInfoList = groupInfoService.list(queryWrapper);
+                    for (GroupInfo groupInfo :groupInfoList) {
+                        StudentTask task = studentTaskService.getTask(taskId,groupInfo.getMemberAccount());
+                        if(task==null){
+                            task = new StudentTask();
+                            task.setTaskId(taskId);
+                            task.setAccount(groupInfo.getMemberAccount());
+                        }
+                        task.setFileName(normalFileName);
+                        task.setImgFile(imgFileName);
+                        task.setVideoFile(videoFileName);
+                        studentTask.setSubmitDate(new Date().toString());
+                        studentTaskService.saveOrUpdate(task);
+                    }
+                }
+
                 return true;
             }
         } catch (Exception e) {
@@ -273,10 +314,10 @@ public class StudentTaskController {
     }
 
     @GetMapping("/downloadAllTask")
-    public void downloadAllTask(HttpServletResponse response, @RequestParam("taskId")Integer taskId){
+    public void downloadAllTask(HttpServletResponse response, @RequestParam("taskId")Integer taskId,@RequestParam("groupId") Integer groupId){
         try {
             OutputStream out = response.getOutputStream();
-            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(studentTaskService.compressAllTaskFile(taskId));
+            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(studentTaskService.compressAllTaskFile(taskId,groupId));
             response.setContentType("APPLICATION/OCTET-STREAM");
             response.setHeader("Content-Disposition","attachment; filename=task.zip");
             // 循环取出流中的数据
@@ -294,10 +335,10 @@ public class StudentTaskController {
         }
     }
     @GetMapping("/downloadOneTask")
-    public void downloadOneTask(HttpServletResponse response, @RequestParam("taskId")Integer taskId,@RequestParam("account") String account){
+    public void downloadOneTask(HttpServletResponse response, @RequestParam("taskId")Integer taskId,@RequestParam("account") String account,@RequestParam("groupId") Integer groupId){
         try {
             OutputStream out = response.getOutputStream();
-            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(studentTaskService.compressOneTaskFile(taskId,account));
+            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(studentTaskService.compressOneTaskFile(taskId,account,groupId));
             response.setContentType("APPLICATION/OCTET-STREAM");
             response.setHeader("Content-Disposition","attachment; filename=task.zip");
             // 循环取出流中的数据
