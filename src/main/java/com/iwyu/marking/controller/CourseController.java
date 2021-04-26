@@ -1,6 +1,7 @@
 package com.iwyu.marking.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iwyu.marking.entity.Course;
@@ -52,6 +53,18 @@ public class CourseController {
     @DeleteMapping("/delete")
     public boolean delete(@RequestParam("id") Integer id){
         return courseService.removeById(id);
+    }
+
+    @DeleteMapping("/deleteList")
+    public boolean deleteList(@RequestParam("courseIdList") String courseIdList){
+        String[] ids =courseIdList.split(",");
+        List<Integer> courseIds = new ArrayList<>();
+        for (String s :ids) {
+            courseIds.add(Integer.parseInt(s));
+        }
+        QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("course_id",courseIds);
+        return courseService.remove(queryWrapper);
     }
 
     @RequestMapping("/importExcel")

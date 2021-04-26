@@ -56,5 +56,14 @@ public class TimetableController {
         queryWrapper.eq("offer_id",offerId);
         return timetableService.remove(queryWrapper);
     }
+
+    @DeleteMapping("/deleteList")
+    public boolean deleteList(@RequestParam("offerId") Integer offerId,@RequestParam("accountList") String accountList){
+        String[] accounts = accountList.split(",");
+        QueryWrapper<Timetable> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("offer_id",offerId);
+        queryWrapper.in("account",accounts);
+        return timetableService.remove(queryWrapper);
+    }
 }
 
