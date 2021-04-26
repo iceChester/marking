@@ -5,6 +5,7 @@ import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iwyu.marking.dto.GroupTasksDTO;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.GroupInfo;
 import com.iwyu.marking.entity.Student;
@@ -23,8 +24,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.nio.file.FileSystem;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,6 +88,11 @@ public class StudentTaskController {
         return studentTaskService.studentTaskList(page,size,taskId);
     }
 
+    @GetMapping("/groupTaskList")
+    public List<GroupTasksDTO> groupTaskList(@RequestParam("taskId") Integer taskId, @RequestParam("offerId") Integer offerId){
+        return studentTaskService.groupTaskList(taskId,offerId);
+    }
+
     @DeleteMapping("/deleteStudentTask")
     public boolean deleteStudentTask(@RequestParam("taskId") Integer taskId, @RequestParam("account") String account,@RequestParam("groupId") Integer groupId){
         String rootPath = "D:/TEST/vue/marking/public/studentTask/";
@@ -105,13 +109,12 @@ public class StudentTaskController {
                 accountList.add(groupInfo.getMemberAccount());
             }
             studentTaskQueryWrapper.in("account",accountList);
-            studentTaskService.remove(studentTaskQueryWrapper);
         }else {
             rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
             studentTaskQueryWrapper.eq("task_id",taskId);
             studentTaskQueryWrapper.eq("account",account);
-            studentTaskService.remove(studentTaskQueryWrapper);
         }
+        studentTaskService.remove(studentTaskQueryWrapper);
 
 
         return FileSystemUtils.deleteRecursively(new File(rootPath));
@@ -228,7 +231,7 @@ public class StudentTaskController {
                         task.setFileName(normalFileName);
                         task.setImgFile(imgFileName);
                         task.setVideoFile(videoFileName);
-                        studentTask.setSubmitDate(new Date().toString());
+                        task.setSubmitDate(new Date().toString());
                         studentTaskService.saveOrUpdate(task);
                     }
                 }

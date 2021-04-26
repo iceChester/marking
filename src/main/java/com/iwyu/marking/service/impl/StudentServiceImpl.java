@@ -1,5 +1,6 @@
 package com.iwyu.marking.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iwyu.marking.dto.ClassesDTO;
 import com.iwyu.marking.entity.Student;
 import com.iwyu.marking.mapper.StudentMapper;
@@ -31,5 +32,12 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, Student> impl
         List<Student> students =studentMapper.getClasses(name);
         List<ClassesDTO> classesDTOS = ClassesDTO.chang(students);
         return classesDTOS;
+    }
+
+    @Override
+    public Student findByAccount(String account) {
+        QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
+        studentQueryWrapper.eq("account",account);
+        return studentMapper.selectOne(studentQueryWrapper);
     }
 }

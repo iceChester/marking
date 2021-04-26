@@ -1,6 +1,7 @@
 package com.iwyu.marking.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.iwyu.marking.dto.GroupTasksDTO;
 import com.iwyu.marking.dto.StudentTaskDTO;
 import com.iwyu.marking.entity.StudentTask;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -23,10 +24,13 @@ public interface StudentTaskService extends IService<StudentTask> {
     //学生获取作业列表
     List<StudentTaskDTO> studentTasks(Integer offerId,String account,int taskType);
 
+
     StudentTask getTask(Integer taskId,String account);
 
     //教师获取某一门课程的学生作业
     IPage<StudentTask> studentTaskList(Long page, Long size, Integer taskId);
+
+    List<GroupTasksDTO> groupTaskList(Integer taskId,Integer offerId);
 
     //压缩全部作业文件并获取作业压缩文件
     File compressAllTaskFile(Integer taskId,Integer groupId) throws Exception;

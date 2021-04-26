@@ -17,4 +17,6 @@ import java.util.List;
 public interface StudentService extends IService<Student> {
 
     List<ClassesDTO> findClassName(String name);
+
+    Student findByAccount(String account);
 }
