@@ -3,6 +3,7 @@ package com.iwyu.marking.service;
 import com.iwyu.marking.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface TaskService extends IService<Task> {
     List<Task> studentAccomplishTask(int offerId,String account,int taskType);
     //查询学生已截至但未完成的作业
     List<Task> studentOverdueTask(int offerId,String account,int taskType);
+    //下载压缩附件
+    File compressAttachment(int taskId);
 }

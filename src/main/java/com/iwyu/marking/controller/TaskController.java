@@ -17,8 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -208,6 +211,27 @@ public class TaskController {
         }
         //前端可以通过状态码，判断文件是否上传成功
         return false;
+    }
+    @GetMapping("/downloadAttachment")
+    public void downloadAttachment(HttpServletResponse response, @RequestParam("taskId")Integer taskId){
+        try {
+            OutputStream out = response.getOutputStream();
+            InputStream inputStream = cn.hutool.core.io.FileUtil.getInputStream(taskService.compressAttachment(taskId));
+            response.setContentType("APPLICATION/OCTET-STREAM");
+            response.setHeader("Content-Disposition","attachment; filename=task.zip");
+            // 循环取出流中的数据
+            byte[] b = new byte[100];
+            int len;
+            while ((len = inputStream.read(b)) !=-1) {
+                out.write(b, 0, len);
+            }
+            inputStream.close();
+            out.close();
+        } catch (IOException e) {
+//            throw new NormalException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
 

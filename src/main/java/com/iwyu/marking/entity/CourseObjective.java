@@ -1,5 +1,6 @@
 package com.iwyu.marking.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 
@@ -29,9 +30,11 @@ public class CourseObjective implements Serializable {
 
     @ApiModelProperty(value = "课程目标主键")
     @TableId(value = "objective_id", type = IdType.AUTO)
+    @Excel(name = "课程目标编号",orderNum = "0")
     private Integer objectiveId;
 
     @ApiModelProperty(value = "课程目标内容")
+    @Excel(name = "课程目标内容",orderNum = "0")
     private String objectiveContent;
 
 

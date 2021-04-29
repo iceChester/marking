@@ -67,6 +67,18 @@ public class CourseController {
         return courseService.remove(queryWrapper);
     }
 
+    @PostMapping("/addObjective")
+    public boolean addObjective(@RequestBody Course course){
+        Course oldCourse = courseService.getById(course.getCourseId());
+        String courseObjectives = "";
+        if(oldCourse.getCourseObjectives()!=null&&oldCourse.getCourseObjectives().length()>0){
+            courseObjectives = oldCourse.getCourseObjectives() + ",";
+        }
+        courseObjectives = courseObjectives + course.getCourseObjectives();
+        oldCourse.setCourseObjectives(courseObjectives);
+        return courseService.updateById(oldCourse);
+    }
+
     @RequestMapping("/importExcel")
     public boolean importExcel(@RequestParam("file") MultipartFile file){
         List<Course> courseList = FileUtil.importExcel(file,1,1,Course.class);
