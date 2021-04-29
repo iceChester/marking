@@ -38,7 +38,7 @@ public class Course implements Serializable {
       @Excel(name = "课程名称",orderNum = "0")
       private String courseName;
 
-      @ApiModelProperty(value = " 课程目标，枚举")
+      @ApiModelProperty(value = " 课程目标")
       private String courseObjectives;
 
       @ApiModelProperty(value = "假删除标识")

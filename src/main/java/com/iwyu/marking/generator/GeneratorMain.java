@@ -52,7 +52,7 @@ public class GeneratorMain {
         generator.setPackageInfo(packageConfig);
         //配置策略
         StrategyConfig strategyConfig = new StrategyConfig();
-//        strategyConfig.setInclude("timetable");
+        strategyConfig.setInclude("course_objective");
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
         strategyConfig.setEntityLombokModel(true);
         generator.setStrategy(strategyConfig);
