@@ -64,6 +64,18 @@ public class TeacherController {
     public boolean delete(@RequestParam("id") Integer id){
         return teacherService.removeById(id);
     }
+
+    @DeleteMapping("/deleteList")
+    public boolean deleteList(@RequestParam("teacherList") String teacherList){
+        String[] teacher = teacherList.split(",");
+        QueryWrapper<Teacher> teacherQueryWrapper = new QueryWrapper<>();
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.in("account",teacher);
+        teacherQueryWrapper.in("account",teacher);
+        teacherService.remove(teacherQueryWrapper);
+        return userService.remove(userQueryWrapper);
+    }
+
     @GetMapping("/likeByName")
     public List<Teacher> likeByName(@RequestParam("keyWord") String keyWord){
         QueryWrapper<Teacher> queryWrapper = new QueryWrapper<>();

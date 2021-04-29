@@ -50,6 +50,12 @@ public class Task implements Serializable {
       @ApiModelProperty(value = " 评分方式，枚举")
       private MarkingTypeEnum markingType;
 
+      @ApiModelProperty(value = "作业附件")
+      private String attachment;
+
+      @ApiModelProperty(value = "作业目标")
+      private String taskObjectives;
+
       private String markingAccount;
 
       private String markingWeight;
