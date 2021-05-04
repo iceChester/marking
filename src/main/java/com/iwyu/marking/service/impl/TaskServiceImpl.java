@@ -72,8 +72,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
             studentTaskQueryWrapper.eq("account",account);
             studentTaskQueryWrapper.eq("task_id",task.getTaskId());
             StudentTask studentTask = studentTaskService.getOne(studentTaskQueryWrapper);
+            System.out.println(studentTask);
             if(studentTask==null){
                 collectingTaskList.add(task);
+                System.out.println(task);
             }
         }
         return collectingTaskList;

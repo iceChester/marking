@@ -38,7 +38,6 @@ public class CourseController {
 
     @GetMapping("/findAll")
     public IPage<Course> findAll(@RequestParam("page")Long page, @RequestParam("size") Long size){
-        //分页下标从1开始,不用额外减一
         System.out.println(page);
         IPage<Course> courseIPage = new Page<>(page,size);
         return courseService.page(courseIPage);

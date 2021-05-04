@@ -28,8 +28,6 @@ public class GroupsController {
 
     @PostMapping("/create")
     public Integer create(@RequestBody Groups group){
-//        group.setDeleted(0);
-        System.out.println(group);
         if(groupsService.save(group)){
             return group.getGroupId();
         }

@@ -47,7 +47,6 @@ public class OfferCoursesController {
     @ApiOperation(value = "教师开课")
     @PostMapping(value = "/offerCourse")
     public boolean offerCourse (@RequestBody OfferCourseDTO dto){
-
         return offerCoursesService.saveOffer(dto);
     }
 

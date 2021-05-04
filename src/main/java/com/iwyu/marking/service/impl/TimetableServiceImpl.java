@@ -78,7 +78,7 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
         List<OfferCourses> offerCourses = offerCoursesMapper.findMyCourse(account);
         return offerCourse2DTO(offerCourses);
     }
-//需要重构
+
     @Override
     public List<TeacherCourseDTO> findStudentCourse(String account) {
         QueryWrapper<Timetable> timetableQueryWrapper = new QueryWrapper<>();
