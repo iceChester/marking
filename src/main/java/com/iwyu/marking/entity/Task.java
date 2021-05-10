@@ -1,8 +1,10 @@
 package com.iwyu.marking.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.List;
 
 import com.iwyu.marking.myenum.MarkingTypeEnum;
 import com.iwyu.marking.myenum.TaskTypeEnum;
@@ -59,5 +61,8 @@ public class Task implements Serializable {
       private String markingAccount;
 
       private String markingWeight;
+
+    @TableField(exist = false)
+    private List<CourseObjective> objectiveContent;
 
 }

@@ -12,6 +12,7 @@ import com.iwyu.marking.service.CourseService;
 import com.iwyu.marking.service.OfferCoursesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.ui.Model;
@@ -76,6 +77,9 @@ public class OfferCoursesController {
     public List<CourseObjective> findObjectives(@RequestParam("offerId") Integer offerId){
         OfferCourses offerCourses = offerCoursesService.getById(offerId);
         Course course = courseService.getById(offerCourses.getCourseId());
+        if(StringUtils.isEmpty(course.getCourseObjectives())||course.getCourseObjectives().length()==0){
+            return null;
+        }
         String[] objective = course.getCourseObjectives().split(",");
         QueryWrapper<CourseObjective> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("objective_id",objective);

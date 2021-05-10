@@ -5,12 +5,11 @@ import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.iwyu.marking.dto.MarkingDTO;
-import com.iwyu.marking.entity.GroupInfo;
-import com.iwyu.marking.entity.OfferCourses;
-import com.iwyu.marking.entity.StudentTask;
-import com.iwyu.marking.entity.Task;
+import com.iwyu.marking.entity.*;
+import com.iwyu.marking.service.CourseObjectiveService;
 import com.iwyu.marking.service.OfferCoursesService;
 import com.iwyu.marking.service.TaskService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
@@ -60,9 +59,11 @@ public class TaskController {
     @Resource
     private OfferCoursesService offerCoursesService;
 
+    @Resource
+    private CourseObjectiveService courseObjectiveService;
+
     @RequestMapping("/save")
     public int save(@RequestBody Task task){
-        System.out.println(task);
         if(task!=null){
             taskService.save(task);
             return task.getTaskId();
@@ -77,24 +78,72 @@ public class TaskController {
 
     @GetMapping("/findCollectingTask")
     public List<Task> findCollectingTask(@RequestParam("offerId") int offerId,@RequestParam("taskType") Integer taskType){
-        return taskService.findCollectingTask(offerId,taskType);
+        List<Task> taskList = taskService.findCollectingTask(offerId,taskType);
+        for (Task task :taskList) {
+            String taskObjectives = task.getTaskObjectives();
+            if(StringUtils.isEmpty(taskObjectives)||taskObjectives.length()==0){
+                continue;
+            }
+            task.setObjectiveContent(this.findObjectives(taskObjectives));
+        }
+        return taskList;
     }
     @GetMapping("/findDeadlineTask")
     public List<Task> findDeadlineTask(@RequestParam("offerId") int offerId,@RequestParam("taskType") Integer taskType){
-        return taskService.findDeadlineTask(offerId,taskType);
+        List<Task> taskList = taskService.findDeadlineTask(offerId,taskType);
+        for (Task task :taskList) {
+            String taskObjectives = task.getTaskObjectives();
+            if(StringUtils.isEmpty(taskObjectives)||taskObjectives.length()==0){
+                continue;
+            }
+            task.setObjectiveContent(this.findObjectives(taskObjectives));
+        }
+        return taskList;
     }
 
     @GetMapping("/studentCollectingTask")
     public List<Task> studentCollectingTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
-        return taskService.studentCollectingTask(offerId,account,taskType);
+        List<Task> taskList = studentCollectingTask(offerId,account,taskType);
+        for (Task task :taskList) {
+            String taskObjectives = task.getTaskObjectives();
+            if(StringUtils.isEmpty(taskObjectives)||taskObjectives.length()==0){
+                continue;
+            }
+            task.setObjectiveContent(this.findObjectives(taskObjectives));
+        }
+        return taskList;
     }
     @GetMapping("/studentAccomplishTask")
     public List<Task> studentAccomplishTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
-        return taskService.studentAccomplishTask(offerId,account,taskType);
+        List<Task> taskList = taskService.studentAccomplishTask(offerId,account,taskType);
+        for (Task task :taskList) {
+            String taskObjectives = task.getTaskObjectives();
+            if(StringUtils.isEmpty(taskObjectives)||taskObjectives.length()==0){
+                continue;
+            }
+            task.setObjectiveContent(this.findObjectives(taskObjectives));
+        }
+        return taskList;
     }
     @GetMapping("/studentOverdueTask")
     public List<Task> studentOverdueTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
-        return taskService.studentOverdueTask(offerId,account,taskType);
+        List<Task> taskList = taskService.studentOverdueTask(offerId,account,taskType);
+        for (Task task :taskList) {
+            String taskObjectives = task.getTaskObjectives();
+            if(StringUtils.isEmpty(taskObjectives)||taskObjectives.length()==0){
+                continue;
+            }
+            task.setObjectiveContent(this.findObjectives(taskObjectives));
+        }
+        return taskList;
+    }
+
+    //获取作业课程目标点
+    public List<CourseObjective> findObjectives(String taskObjectives){
+        String[] objective = taskObjectives.split(",");
+        QueryWrapper<CourseObjective> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("objective_id",objective);
+        return courseObjectiveService.list(queryWrapper);
     }
 
     @GetMapping("/checkMarking")

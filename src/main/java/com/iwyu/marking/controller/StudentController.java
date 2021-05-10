@@ -78,7 +78,6 @@ public class StudentController {
     public boolean importExcel(@RequestParam("file") MultipartFile file){
         //解析excel，
         List<Student> studentList = FileUtil.importExcel(file,1,1,Student.class);
-        //也可以使用MultipartFile,使用 FileUtil.importExcel(MultipartFile file, Integer titleRows, Integer headerRows, Class<T> pojoClass)导入
         System.out.println("导入数据一共【"+studentList.size()+"】行");
         List<User> userList = new ArrayList<>();
         for (Student student :studentList) {
