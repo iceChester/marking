@@ -18,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -38,7 +40,6 @@ public class CourseController {
 
     @GetMapping("/findAll")
     public IPage<Course> findAll(@RequestParam("page")Long page, @RequestParam("size") Long size){
-        System.out.println(page);
         IPage<Course> courseIPage = new Page<>(page,size);
         return courseService.page(courseIPage);
     }
@@ -64,6 +65,19 @@ public class CourseController {
         QueryWrapper<Course> queryWrapper = new QueryWrapper<>();
         queryWrapper.in("course_id",courseIds);
         return courseService.remove(queryWrapper);
+    }
+
+    @DeleteMapping("/deleteObjective")
+    public  boolean deleteObjective(@RequestParam("courseId") Integer courseId,@RequestParam("objectiveId") Integer objectiveId){
+        Course oldCourse = courseService.getById(courseId);
+        //移除某个课程指标id
+        String[] objectives = oldCourse.getCourseObjectives().split(",");
+        List<String> objectiveList = Arrays.asList(objectives);
+        List<String> arrList = new ArrayList<String>(objectiveList);
+        arrList.remove(Integer.toString(objectiveId));
+        String str = arrList.stream().collect(Collectors.joining(","));
+        oldCourse.setCourseObjectives(str);
+        return courseService.updateById(oldCourse);
     }
 
     @PostMapping("/addObjective")

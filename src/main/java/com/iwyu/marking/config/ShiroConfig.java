@@ -50,6 +50,7 @@ public class ShiroConfig {
         filterMap.put("/static/data/**", "anon");
         filterMap.put("/data/**", "anon");
         filterMap.put("/userLogin", "anon");
+        filterMap.put("/changePwd","anon");
 //        filterMap.put("/list", "roles[admin,user]");
 //        filterMap.put("/delete", "perms[admin:delete]");
         filterMap.put("/**", "auth");

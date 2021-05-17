@@ -68,10 +68,7 @@ public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, Off
             timetable.setStudentName(student.getStudentName());
             timetableList.add(timetable);
         }
-        if(timetableService.saveBatch(timetableList)){
-            return true;
-        }
-        return false;
+        return timetableService.saveBatch(timetableList);
     }
 
     @Override
@@ -108,15 +105,19 @@ public class OfferCoursesServiceImpl extends ServiceImpl<OfferCoursesMapper, Off
             QueryWrapper<Teacher> teacherQueryWrapper1 = new QueryWrapper<>();
             teacherQueryWrapper1.eq("account",offerCourses.getMainTeacher());
             offerCourses.setMainTeacherName(teacherService.getOne(teacherQueryWrapper1).getTeacherName());
-            if(offerCourses.getAssistantTeacherOne()!=null&&offerCourses.getAssistantTeacherOne().length()>0){
+            if(offerCourses.getAssistantTeacherOne()!=null&&
+                    offerCourses.getAssistantTeacherOne().length()>0){
                 QueryWrapper<Teacher> teacherQueryWrapper2 = new QueryWrapper<>();
                 teacherQueryWrapper2.eq("account",offerCourses.getAssistantTeacherOne());
-                offerCourses.setAssistantOneName(teacherService.getOne(teacherQueryWrapper2).getTeacherName());
+                String teacherName = teacherService.getOne(teacherQueryWrapper2).getTeacherName();
+                offerCourses.setAssistantOneName(teacherName);
             }
-            if(offerCourses.getAssistantTeacherTwo()!=null&&offerCourses.getAssistantTeacherTwo().length()>0){
+            if(offerCourses.getAssistantTeacherTwo()!=null&&
+                    offerCourses.getAssistantTeacherTwo().length()>0){
                 QueryWrapper<Teacher> teacherQueryWrapper3 = new QueryWrapper<>();
                 teacherQueryWrapper3.eq("account",offerCourses.getAssistantTeacherTwo());
-                offerCourses.setAssistantTwoName(teacherService.getOne(teacherQueryWrapper3).getTeacherName());
+                String teacherName = teacherService.getOne(teacherQueryWrapper3).getTeacherName();
+                offerCourses.setAssistantTwoName(teacherName);
             }
             return offerCourses;
         }

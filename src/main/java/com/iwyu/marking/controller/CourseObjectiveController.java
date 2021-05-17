@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.iwyu.marking.entity.Course;
 import com.iwyu.marking.entity.CourseObjective;
+import com.iwyu.marking.entity.OfferCourses;
 import com.iwyu.marking.service.CourseObjectiveService;
+import com.iwyu.marking.service.CourseService;
+import com.iwyu.marking.service.OfferCoursesService;
 import com.iwyu.marking.utils.FileUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +36,9 @@ public class CourseObjectiveController {
     @Resource
     private CourseObjectiveService courseObjectiveService;
 
+    @Resource
+    private CourseService courseService;
+
 
     @DeleteMapping("/delete")
     public boolean delete(@RequestParam("id") Integer id){
@@ -53,15 +59,43 @@ public class CourseObjectiveController {
 
     @GetMapping("/findAll")
     public IPage<CourseObjective> findAll(@RequestParam("page")Long page, @RequestParam("size") Long size){
-        //分页下标从1开始,不用额外减一
-        System.out.println(page);
         IPage<CourseObjective> courseIPage = new Page<>(page,size);
         return courseObjectiveService.page(courseIPage);
     }
 
     @GetMapping("/getAll")
-    public List<CourseObjective> findAll(){
-        return courseObjectiveService.list();
+    public IPage<CourseObjective> findAll(@RequestParam("courseId") Integer courseId,@RequestParam("page")Long page, @RequestParam("size") Long size){
+        Course course = courseService.getById(courseId);
+        IPage<CourseObjective> objectiveIPage = new Page<>(page,size);
+        String objective = course.getCourseObjectives();
+        if(objective!=null&&objective.length()>0){
+            QueryWrapper<CourseObjective> objectiveQueryWrapper = new QueryWrapper<>();
+            String[] objectives = objective.split(",");
+            List<Integer> objective2Int = new ArrayList<>();
+            for (String s :objectives) {
+                objective2Int.add(Integer.parseInt(s));
+            }
+            objectiveQueryWrapper.notIn("objective_id", objective2Int );
+            return courseObjectiveService.page(objectiveIPage,objectiveQueryWrapper);
+        }
+        return courseObjectiveService.page(objectiveIPage);
+    }
+
+    @GetMapping("/getCourseObjective")
+    public List<CourseObjective> getCourseObjective(@RequestParam("courseId") Integer courseId){
+        Course course = courseService.getById(courseId);
+        String objective = course.getCourseObjectives();
+        if(objective!=null&&objective.length()>0){
+            QueryWrapper<CourseObjective> objectiveQueryWrapper = new QueryWrapper<>();
+            String[] objectives = objective.split(",");
+            List<Integer> objective2Int = new ArrayList<>();
+            for (String s :objectives) {
+                objective2Int.add(Integer.parseInt(s));
+            }
+            objectiveQueryWrapper.in("objective_id", objective2Int );
+            return courseObjectiveService.list(objectiveQueryWrapper);
+        }
+        return null;
     }
 
     @GetMapping("/likeByName")

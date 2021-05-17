@@ -99,7 +99,8 @@ public class StudentTaskController {
         Integer offerId = taskService.getById(taskId).getOfferId();
         QueryWrapper<StudentTask> studentTaskQueryWrapper = new QueryWrapper<>();
         if(groupId!=-1){
-            rootPath = rootPath + offerId.toString() + "/" + "小组作业" + "/" + taskId.toString()+ "/" + groupId.toString() + "/";
+            rootPath = rootPath + offerId.toString() + "/" + "小组作业" + "/" +
+                    taskId.toString()+ "/" + groupId.toString() + "/";
             studentTaskQueryWrapper.eq("task_id",taskId);
             QueryWrapper<GroupInfo> groupInfoQueryWrapper = new QueryWrapper<>();
             groupInfoQueryWrapper.eq("group_id",groupId);
@@ -110,13 +111,12 @@ public class StudentTaskController {
             }
             studentTaskQueryWrapper.in("account",accountList);
         }else {
-            rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" + taskId.toString()+ "/" + account + "/";
+            rootPath = rootPath + offerId.toString() + "/" + "个人作业" + "/" +
+                    taskId.toString()+ "/" + account + "/";
             studentTaskQueryWrapper.eq("task_id",taskId);
             studentTaskQueryWrapper.eq("account",account);
         }
         studentTaskService.remove(studentTaskQueryWrapper);
-
-
         return FileSystemUtils.deleteRecursively(new File(rootPath));
     }
 
@@ -222,7 +222,8 @@ public class StudentTaskController {
                     queryWrapper.eq("group_id",groupId);
                     List<GroupInfo> groupInfoList = groupInfoService.list(queryWrapper);
                     for (GroupInfo groupInfo :groupInfoList) {
-                        StudentTask task = studentTaskService.getTask(taskId,groupInfo.getMemberAccount());
+                        String memberAccount = groupInfo.getMemberAccount();
+                        StudentTask task = studentTaskService.getTask(taskId,memberAccount);
                         if(task==null){
                             task = new StudentTask();
                             task.setTaskId(taskId);

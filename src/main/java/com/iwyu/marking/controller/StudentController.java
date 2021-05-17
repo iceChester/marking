@@ -77,8 +77,8 @@ public class StudentController {
     @RequestMapping("/importExcel")
     public boolean importExcel(@RequestParam("file") MultipartFile file){
         //解析excel，
-        List<Student> studentList = FileUtil.importExcel(file,1,1,Student.class);
-        System.out.println("导入数据一共【"+studentList.size()+"】行");
+        List<Student> studentList = FileUtil.importExcel(file,
+                1,1,Student.class);
         List<User> userList = new ArrayList<>();
         for (Student student :studentList) {
             User user = new User();
@@ -93,7 +93,6 @@ public class StudentController {
         }catch (Exception e){
             return false;
         }
-
         return studentService.saveBatch(studentList);
     }
     @RequestMapping("/export")

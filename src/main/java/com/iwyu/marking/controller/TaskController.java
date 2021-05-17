@@ -68,7 +68,7 @@ public class TaskController {
             taskService.save(task);
             return task.getTaskId();
         }
-        return  0;
+        return  -1;
     }
 
     @RequestMapping("/findByOfferId")
@@ -103,7 +103,7 @@ public class TaskController {
 
     @GetMapping("/studentCollectingTask")
     public List<Task> studentCollectingTask(@RequestParam("offerId") Integer offerId, @RequestParam("account") String account,@RequestParam("taskType") Integer taskType){
-        List<Task> taskList = studentCollectingTask(offerId,account,taskType);
+        List<Task> taskList = taskService.studentCollectingTask(offerId,account,taskType);
         for (Task task :taskList) {
             String taskObjectives = task.getTaskObjectives();
             if(StringUtils.isEmpty(taskObjectives)||taskObjectives.length()==0){

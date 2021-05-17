@@ -4,6 +4,7 @@ package com.iwyu.marking.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -36,18 +37,41 @@ public class ShiroController {
 
     private final ShiroService shiroService;
 
-    @Autowired
+    @Resource
     private TeacherService teacherService;
 
-    @Autowired
+    @Resource
     private StudentService studentService;
 
+    @Resource
+    private  UserService userService;
 
 
     public ShiroController(ShiroService shiroService) {
         this.shiroService = shiroService;
     }
 
+    /**
+    *修改密码
+    **/
+    @PostMapping("/changePwd")
+    public Map<String, Object> changePwd(@RequestBody @Validated LoginDTO loginDTO){
+        Map<String, Object> result = new HashMap<>();
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("account",loginDTO.getAccount());
+        userQueryWrapper.eq("password",loginDTO.getPassword());
+        User user = userService.getOne(userQueryWrapper);
+        if(user==null){
+            result.put("status", 400);
+            result.put("msg", "账号或密码有误");
+        }else {
+            user.setPassword(loginDTO.getCheckPassword());
+            userService.updateById(user);
+            result.put("status", 200);
+            result.put("msg", "修改成功");
+        }
+        return result;
+    }
 
     /**
      * 登录

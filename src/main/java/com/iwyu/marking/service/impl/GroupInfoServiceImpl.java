@@ -118,7 +118,11 @@ public class GroupInfoServiceImpl extends ServiceImpl<GroupInfoMapper, GroupInfo
             QueryWrapper<GroupInfo> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("group_id",groupsList.get(currId+i).getGroupId());
             List<GroupInfo> groupInfoList = infoMapper.selectList(queryWrapper);
-            GroupInfoDTO groupInfoDTO = new GroupInfoDTO(groupsList.get(currId+i).getGroupId(),groupsList.get(currId+i).getLeaderName(),groupsList.get(currId+i).getGroupName(),groupInfoList);
+            Groups groups = groupsList.get(currId+i);
+            GroupInfoDTO groupInfoDTO = new GroupInfoDTO(groups.getGroupId(),
+                    groups.getLeaderName(),
+                    groups.getGroupName(),
+                    groupInfoList);
             groupInfoDTOList.add(groupInfoDTO);
         }
         groupInfoDTOIPage.setSize(size);

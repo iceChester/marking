@@ -39,6 +39,9 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     @Resource
     private TimetableMapper timetableMapper;
 
+    @Resource
+    private StudentMapper studentMapper;
+
     /**
     *@Description 将课程信息封装打包
     *@Author XiaoMao
@@ -100,22 +103,16 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     @Override
     public IPage<Student> studentInfo(Long page, Long size, Integer offerId) {
         Page<Student> studentPage = new Page<>(page,size);
-        List<Student> students = timetableMapper.studentInfo(offerId);
-        int count = students.size();
-        List<Student> pageList = new ArrayList<>();
-//计算当前页第一条数据的下标
-        int current = page.intValue();
-        int currId = current>1 ? (int) ((current - 1) * size) :0;
-        for (int i=0; i<size && i<count - currId;i++){
-            pageList.add(students.get(currId+i));
+        QueryWrapper<Timetable> timetableQueryWrapper = new QueryWrapper<>();
+        timetableQueryWrapper.eq("offer_id",offerId);
+        List<Timetable> timetableList = timetableMapper.selectList(timetableQueryWrapper);
+        List<String> accountList = new ArrayList<>();
+        for (Timetable timetable :timetableList) {
+            accountList.add(timetable.getAccount());
         }
-        studentPage.setSize(size);
-        studentPage.setCurrent(current);
-        studentPage.setTotal(count);
-//计算分页总页数
-        studentPage.setPages(count %10 == 0 ? count/10 :count/10+1);
-        studentPage.setRecords(pageList);
-        return studentPage;
+        QueryWrapper<Student> studentQueryWrapper = new QueryWrapper<>();
+        studentQueryWrapper.in("account",accountList);
+        return studentMapper.selectPage(studentPage,studentQueryWrapper);
     }
 
     @Override
