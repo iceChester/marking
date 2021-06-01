@@ -3,9 +3,7 @@ package com.iwyu.marking.handler;/**
  */
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.iwyu.marking.entity.TeachingMaterial;
 import org.apache.ibatis.reflection.MetaObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**

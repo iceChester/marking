@@ -59,7 +59,6 @@ public class StudentTaskServiceImpl extends ServiceImpl<StudentTaskMapper, Stude
                 studentTaskDTOList.add(studentTaskDTO);
             }
         }
-
         return studentTaskDTOList;
     }
 
@@ -106,15 +105,11 @@ public class StudentTaskServiceImpl extends ServiceImpl<StudentTaskMapper, Stude
             leaderTask.setGroupId(groups.getGroupId());
             studentTaskList.add(leaderTask);
             for (GroupInfo groupInfo :groupInfoList) {
-                System.out.println(11111);
-                System.out.println(groupInfo);
                 QueryWrapper<StudentTask> queryWrapper = new QueryWrapper<>();
                 queryWrapper.eq("account",groupInfo.getMemberAccount());
                 queryWrapper.eq("task_id",taskId);
                 StudentTask studentTask = studentTaskMapper.selectOne(queryWrapper);
                 studentTask.setStudentName(groupInfo.getMemberName());
-                System.out.println(groupInfo.getMemberAccount());
-                System.out.println(studentService.findByAccount(groupInfo.getMemberAccount()));
                 studentTask.setClassName(studentService.findByAccount(groupInfo.getMemberAccount()).getClassName());
                 studentTaskList.add(studentTask);
             }

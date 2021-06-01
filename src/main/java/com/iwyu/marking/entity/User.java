@@ -41,10 +41,4 @@ public class User implements Serializable {
       @ApiModelProperty(value = "权限")
       private String authority;
 
-      @ApiModelProperty(value = "假删除标识，创建时自动填充0")
-      @TableField(fill = FieldFill.INSERT)
-      @TableLogic
-      private Integer deleted;
-
-
 }

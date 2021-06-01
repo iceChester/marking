@@ -53,6 +53,10 @@ public class StudentController {
     }
     @DeleteMapping("/delete")
     public boolean delete(@RequestParam("id") Integer id){
+        Student student = studentService.getById(id);
+        QueryWrapper<User> query = new QueryWrapper<>();
+        query.eq("account",student.getAccount());
+        userService.remove(query);
         return studentService.removeById(id);
     }
 

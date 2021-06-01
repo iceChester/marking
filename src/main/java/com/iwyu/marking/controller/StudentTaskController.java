@@ -77,7 +77,6 @@ public class StudentTaskController {
         return studentTaskService.studentTasks(offerId, account,taskType);
     }
 
-
     @PostMapping("/saveScore")
     public boolean saveScore(@RequestBody StudentTask studentTask){
         return studentTaskService.saveOrUpdate(studentTask);
@@ -202,8 +201,6 @@ public class StudentTaskController {
                                     FILE_ZIP.contains(type)||FILE_RAR.contains(type)) {
                                 file[i].transferTo(fileNew);
                                 normalFileName = normalFileName + newFileName + ",";
-                            }else{
-
                             }
                         }else {
                             return false;

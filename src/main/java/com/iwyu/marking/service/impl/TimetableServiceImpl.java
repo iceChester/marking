@@ -103,9 +103,9 @@ public class TimetableServiceImpl extends ServiceImpl<TimetableMapper, Timetable
     @Override
     public IPage<Student> studentInfo(Long page, Long size, Integer offerId) {
         Page<Student> studentPage = new Page<>(page,size);
-        QueryWrapper<Timetable> timetableQueryWrapper = new QueryWrapper<>();
-        timetableQueryWrapper.eq("offer_id",offerId);
-        List<Timetable> timetableList = timetableMapper.selectList(timetableQueryWrapper);
+        QueryWrapper<Timetable> query = new QueryWrapper<>();
+        query.eq("offer_id",offerId);
+        List<Timetable> timetableList = timetableMapper.selectList(query);
         List<String> accountList = new ArrayList<>();
         for (Timetable timetable :timetableList) {
             accountList.add(timetable.getAccount());

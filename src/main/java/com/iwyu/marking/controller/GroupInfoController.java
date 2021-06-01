@@ -42,9 +42,6 @@ public class GroupInfoController {
 
     @PostMapping("/save")
     public boolean save(@RequestBody List<GroupInfo> groupInfoList){
-        for (GroupInfo groupInfo :groupInfoList) {
-            System.out.println(groupInfo.getMemberName());
-        }
         return groupInfoService.saveBatch(groupInfoList);
     }
     @GetMapping("/courseGroups")
